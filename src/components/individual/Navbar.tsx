@@ -1,6 +1,6 @@
 import React from 'react'
 import {Box, Button} from '@chakra-ui/react'
-import {routes} from '../routes/routes'
+import {routes} from '../../routes/routes'
 import {useNavigate} from 'react-router-dom'
 
 interface IProps {

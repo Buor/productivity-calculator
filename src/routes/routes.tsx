@@ -1,5 +1,5 @@
 import React from "react"
-import {TimeAnalyzer} from "../components/TimeAnalyzer"
+import {TimeAnalyzer} from "../components/individual/TimeAnalyzer/TimeAnalyzer"
 
 export interface IRoute {
     link: string
