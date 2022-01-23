@@ -24,6 +24,8 @@ export const Navbar: React.FC<IProps> = () => {
                     flex={'1 1 200px'}
                     border={'0'}
                     backgroundColor={'custom.dark'}
+                    fontWeight={'700'}
+                    fontSize={17}
                     _hover={{
                         backgroundColor: 'custom.medium'
                     }}
