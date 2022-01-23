@@ -10,7 +10,7 @@ import {customTheme} from './theme/theme'
 
 ReactDOM.render(
     <BrowserRouter>
-        <ChakraProvider theme={customTheme}>
+        <ChakraProvider theme={customTheme} resetCSS>
             <App/>
         </ChakraProvider>
     </BrowserRouter>,
