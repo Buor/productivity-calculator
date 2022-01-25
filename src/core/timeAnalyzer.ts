@@ -21,7 +21,6 @@ function parseActions(actionsString: string): IAction[] {
 
         const actionRegExp = Array.from(stringAction.matchAll(/((?<startTimeHours>[012]?\d):(?<startTimeMinutes>[0-5]\d))?-(?<endTimeHours>[012]?\d):(?<endTimeMinutes>[0-5]\d)\)\s*(?<name>[^#]+)#?(?<nature>[PNnПНн])?/g))[0]
 
-        console.log(actionRegExp)
         validateActionString(stringAction, actionRegExp)
 
         //form actionObject
@@ -29,20 +28,25 @@ function parseActions(actionsString: string): IAction[] {
         const startTime = new Date(0, 0, 0, +actionRegExp!.groups!.startTimeHours, +actionRegExp!.groups!.startTimeMinutes)
         const endTime = new Date(0, 0, 0, +actionRegExp!.groups!.endTimeHours, +actionRegExp!.groups!.endTimeMinutes)
 
+        //check time validity
+        const timeValidity = checkTimeValidity(stringAction, startTime, endTime)
+        if (timeValidity !== 'ok') throw new Error(timeValidity)
+
+        //define nature of action
         const natureLetter = actionRegExp!.groups!.nature
         let nature: 'positive' | 'neutral' | 'negative'
         switch (natureLetter) {
             case 'P':
             case 'П':
-                nature = 'positive';
+                nature = 'positive'
                 break
             case 'N':
             case 'Н':
-                nature = 'negative';
+                nature = 'negative'
                 break
             case 'n':
             case 'н':
-                nature = 'neutral';
+                nature = 'neutral'
                 break
             default:
                 nature = 'neutral'
@@ -52,6 +56,15 @@ function parseActions(actionsString: string): IAction[] {
         actions.push(action)
     }
     return actions
+
+    function checkTimeValidity(stringAction: string, startTime: Date, endTime: Date): string {
+        if (actions.length) {
+            const lastAction = actions.slice(-1)[0]
+            if (lastAction.endTime > startTime) return `Error! Action ${lastAction.name} ends after the start of ${stringAction}!`
+        }
+        if (endTime <= startTime) return `Error! Action "${stringAction}" end time must be higher than start time!`
+        return 'ok'
+    }
 }
 
 export function analyzeTime(actionsString: string): IAnalyzeResult | IAnalyzeResultError | void {
