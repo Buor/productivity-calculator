@@ -13,6 +13,22 @@ function validateActionString(initialString: string, actionRegExp: RegExpMatchAr
 
 }
 
+function calculateEfficiency(actions: IAction[]): number | any {
+    const startDayTime = actions[0].startTime
+    const endDayTime = actions.slice(-1)[0].endTime
+
+    const wholeDayTime = endDayTime.valueOf() - startDayTime!.valueOf()
+
+    let positiveActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    if(positiveActionsTime === 0) return 0
+
+    return (positiveActionsTime / wholeDayTime * 100).toFixed(2)
+}
+
+function getActionDuration(action: IAction) {
+    return action.startTime ? action.endTime.valueOf() - action.startTime.valueOf() : 0
+}
+
 function parseActions(actionsString: string): IAction[] {
     const stringActions = actionsString.split('\n')
     const actions: IAction[] = []

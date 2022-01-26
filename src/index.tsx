@@ -18,5 +18,5 @@ ReactDOM.render(
     document.getElementById('root')
 )
 //todo test remove
-console.log(analyzeTime(`6:44-7:00) Просыпаться, зайти в соцсети
+console.log(analyzeTime(`6:44-7:00) Просыпаться, зайти в соцсети #П
 -7:47) Умываться, готовить завтрак, завтракать`))
