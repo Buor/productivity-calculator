@@ -7,9 +7,15 @@ interface IAction {
     description: string
 }
 
+interface IActionsPercentage {
+    positiveActionsTime: number
+    negativeActionsTime: number
+    neutralActionsTime: number
+}
+
 type TNature = 'positive' | 'neutral' | 'negative'
-type TAction = 'sport' | 'default'
-const actionTypes = ['sport', 'default']
+type TAction = 'sport' | 'default' | 'food' | 'sleep'
+const actionTypes = ['sport', 'default', 'food', 'sleep']
 
 function parseActions(actionsString: string): IAction[] {
     const stringActions = actionsString.split('\n')
@@ -26,7 +32,8 @@ function parseActions(actionsString: string): IAction[] {
             continue
         }
 
-        const actionRegExp = Array.from(stringAction.matchAll(/((?<startTimeHours>[012]?\d):(?<startTimeMinutes>[0-5]\d))?-(?<endTimeHours>[012]?\d):(?<endTimeMinutes>[0-5]\d)\)\s*(?<name>[^#.]+)\s#?(?<nature>[PNnПНн])?(\.(?<type>\w+))?/g))[0]
+        const actionRegExp = Array.from(stringAction.matchAll(/((?<startTimeHours>[012]?\d):(?<startTimeMinutes>[0-5]\d))?-(?<endTimeHours>[012]?\d):(?<endTimeMinutes>[0-5]\d)\)\s*(?<name>[^#.]+)\s*#?(?<nature>[PNnПНн])?(\.(?<type>\w+))?/g))[0]
+        // const actionRegExp = Array.from(stringAction.matchAll(/((?<startTimeHours>[012]?\d):(?<startTimeMinutes>[0-5]\d))?-(?<endTimeHours>[012]?\d):(?<endTimeMinutes>[0-5]\d)\)\s*(?<name>[^#.]+)\s#?(?<nature>[PNnПНн])?(\.(?<type>\w+))?/g))[0]
 
         validateActionString(stringAction, actionRegExp)
 
@@ -82,38 +89,75 @@ function parseActions(actionsString: string): IAction[] {
     }
 }
 
-function calculateEfficiency(actions: IAction[]): number | any {
+function getActionDuration(action: IAction, unit: 'm' | 's' | 'ms' = 'ms') {
+    let ms = action.startTime ? action.endTime.valueOf() - action.startTime.valueOf() : 0
+
+    if (unit === 'ms') return ms
+    if (unit === 's') return ms / 1000
+    return Math.floor(ms / 1000 / 60)
+}
+
+function calculateActionsPercentage(actions: IAction[]): IActionsPercentage {
     const startDayTime = actions[0].startTime
     const endDayTime = actions.slice(-1)[0].endTime
 
     const wholeDayTime = endDayTime.valueOf() - startDayTime!.valueOf()
 
-    let positiveActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDurationMs(action) : acc, 0)
-    if (positiveActionsTime === 0) return 0
+    let positiveActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let negativeActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let neutralActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
 
-    return (positiveActionsTime / wholeDayTime * 100).toFixed(2)
+    return {
+        positiveActionsTime: +(positiveActionsTime / wholeDayTime * 100).toFixed(2),
+        negativeActionsTime: +(negativeActionsTime / wholeDayTime * 100).toFixed(2),
+        neutralActionsTime: +(neutralActionsTime / wholeDayTime * 100).toFixed(2)
+    }
 }
 
-function getActionDurationMs(action: IAction) {
-    return action.startTime ? action.endTime.valueOf() - action.startTime.valueOf() : 0
+function calculateProductivity(actions: IAction[]): number {
+    let productivityValue = 0
+
+    /* Consider Sport
+        1 hour per day = +15
+        +3 for every additional 15 minutes
+    */
+    const sportDurationM = actions.reduce((acc, action) => action.type === 'sport' ? acc + getActionDuration(action, 'm') : acc, 0)
+    if (sportDurationM >= 60) productivityValue += 15 + Math.round((sportDurationM - 60) / 15) * 3
+
+    /* Consider Positive actions
+        6 minutes of any positive action = +1
+        For every hour +5 in addition
+    */
+    const positiveActionsDurationM = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action, 'm') : acc, 0)
+    productivityValue += Math.floor(positiveActionsDurationM / 6) + Math.floor(positiveActionsDurationM / 60) * 5
+
+    /* Consider Bedtime
+        < 22:00 = +20
+        22:00 - 23:00 = +15
+        23:00 - 00:00 = +10
+    */
+    const bedtimeHour = actions.slice(-1)[0].endTime.getHours()
+
+    if (bedtimeHour <= 22) productivityValue += 20
+    else if (bedtimeHour === 23) productivityValue += 15
+    else if (bedtimeHour === 0) productivityValue += 10
+
+    return productivityValue
 }
 
 export interface IAnalyzeResult {
-    positiveActionsPercent: number
-    neutralActionsPercent: number
-    negativeActionsPercent: number
-    efficiency: number
+    actionsPercentage: IActionsPercentage
+    productivity: number
 }
 
-export interface IAnalyzeResultError {
-    errorMessage: string
-}
+export function analyzeTime(actionsString: string): IAnalyzeResult {
 
-export function analyzeTime(actionsString: string): IAnalyzeResult | IAnalyzeResultError | any {
-    try {
-        const actions = parseActions(actionsString)
-        const efficiency = calculateEfficiency(actions)
-    } catch (e: any) {
-        return {errorMessage: e.message}
+    const actions = parseActions(actionsString)
+    const actionsPercentage = calculateActionsPercentage(actions)
+    const productivity = calculateProductivity(actions)
+
+    return {
+        actionsPercentage,
+        productivity
     }
 }
