@@ -15,7 +15,7 @@ export const NumeratedTextarea: React.FC<IProps> = ({placeholder = '', initialWi
             .split('')
             .reduce((acc, ch) => ch === '\n' ? acc + 1 : acc, 0) + 1
 
-        return Array(countLines).fill(null).map((_, i) => <Box textAlign={'right'}>{i + 1}</Box>)
+        return Array(countLines).fill(null).map((_, i) => <Box key={i} textAlign={'right'}>{i + 1}</Box>)
     }, [textareaValue])
 
     return (
