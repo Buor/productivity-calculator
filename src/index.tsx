@@ -7,7 +7,6 @@ import App from './App'
 import {ChakraProvider} from '@chakra-ui/react'
 import {BrowserRouter} from 'react-router-dom'
 import {customTheme} from './theme/theme'
-import {analyzeTime} from './core/timeAnalyzer';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -17,6 +16,3 @@ ReactDOM.render(
     </BrowserRouter>,
     document.getElementById('root')
 )
-//todo test remove
-console.log(analyzeTime(`6:44-7:00) Просыпаться, зайти в соцсети #П
--7:47) Умываться, готовить завтрак, завтракать`))
