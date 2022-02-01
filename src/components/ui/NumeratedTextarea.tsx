@@ -1,14 +1,14 @@
-import React, {useMemo, useState} from 'react'
+import React, {useMemo} from 'react'
 import {Box, Textarea} from '@chakra-ui/react';
 
 interface IProps {
     initialWidth?: string
     placeholder?: string
+    textareaValue: string
+    setTextareaValue: Function
 }
 
-export const NumeratedTextarea: React.FC<IProps> = ({placeholder = '', initialWidth = '700px'}) => {
-
-    const [textareaValue, setTextareaValue] = useState('')
+export const NumeratedTextarea: React.FC<IProps> = ({placeholder = '', initialWidth = '700px', textareaValue, setTextareaValue}) => {
 
     const numberElements = useMemo(() => {
         const countLines = textareaValue
