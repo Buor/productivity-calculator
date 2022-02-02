@@ -54,6 +54,9 @@ function parseActions(actionsString: string): IAction[] {
         const action: IAction = {name, startTime, endTime, nature, description: '', type: type || 'default'}
         actions.push(action)
     }
+
+    if(actions.length === 0) throw new Error('Error! No actions found!')
+
     return actions
 
     function checkTimeValidity(stringAction: string, startTime: Date, endTime: Date): string {
