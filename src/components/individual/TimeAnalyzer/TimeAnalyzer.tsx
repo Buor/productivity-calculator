@@ -11,10 +11,17 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
 
     const [actionsText, setActionsText] = useState('')
     const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>(null)
+    const [enterActionsError, setEnterActionsError] = useState<Error | null>(null)
 
     const analyze = () => {
-        const analyzeResult = analyzeTime(actionsText)
-        setAnalyzeResult(analyzeResult)
+        try {
+            const analyzeResult = analyzeTime(actionsText)
+            setAnalyzeResult(analyzeResult)
+            setEnterActionsError(null)
+        } catch (e) {
+            console.error(e)
+            setEnterActionsError(e as Error)
+        }
     }
 
     return (
@@ -23,7 +30,8 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
                 analyzeResult === null
                     ? <EnterActions actionsText={actionsText}
                                     setActionsText={setActionsText}
-                                    handleAnalyzeButtonClick={analyze}/>
+                                    handleAnalyzeButtonClick={analyze}
+                                    error={enterActionsError}/>
                     : <AnalyzeResult analyzeResult={analyzeResult}/>
             }
         </>
