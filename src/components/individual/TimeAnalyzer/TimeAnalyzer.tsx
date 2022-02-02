@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {EnterActions} from './EnterActions';
-import {analyzeTime} from '../../../core/timeAnalyzer';
+import {analyzeTime, IAnalyzeResult} from '../../../core/timeAnalyzer';
+import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
 
 interface IProps {
 
@@ -9,17 +10,22 @@ interface IProps {
 export const TimeAnalyzer: React.FC<IProps> = () => {
 
     const [actionsText, setActionsText] = useState('')
+    const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>(null)
 
     const analyze = () => {
-        //todo implement
-        analyzeTime(actionsText)
+        const analyzeResult = analyzeTime(actionsText)
+        setAnalyzeResult(analyzeResult)
     }
 
     return (
         <>
-            <EnterActions actionsText={actionsText}
-                          setActionsText={setActionsText}
-                          handleAnalyzeButtonClick={analyze}/>
+            {
+                analyzeResult === null
+                    ? <EnterActions actionsText={actionsText}
+                                    setActionsText={setActionsText}
+                                    handleAnalyzeButtonClick={analyze}/>
+                    : <AnalyzeResult analyzeResult={analyzeResult}/>
+            }
         </>
     )
 }
