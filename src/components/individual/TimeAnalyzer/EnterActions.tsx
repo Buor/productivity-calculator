@@ -17,7 +17,7 @@ export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, han
                                    placeholder={'Enter your actions here'}/>
             </Box>
             <Button mt={8} alignSelf={'center'} colorScheme={'yellow'}
-                    onClick={() => handleAnalyzeButtonClick}>Analyze</Button>
+                    onClick={() => handleAnalyzeButtonClick()}>Analyze</Button>
         </Box>
     )
 }
