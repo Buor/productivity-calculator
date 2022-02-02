@@ -7,7 +7,7 @@ interface IAction {
     description: string
 }
 
-interface IActionsPercentage {
+export interface IActionsPercentage {
     positiveActionsTime: number
     negativeActionsTime: number
     neutralActionsTime: number
