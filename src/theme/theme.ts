@@ -1,10 +1,11 @@
 import {extendTheme} from '@chakra-ui/react'
-
+import {Card} from '../components/ui/customComponents'
 export const customTheme = extendTheme({
     colors: {
         custom: {
             dark: 'rgb(18,18,20)',
-            medium: 'rgb(37,36,39)'
+            medium: 'rgb(37,36,39)',
+            mediumDark: 'rgb(30,30,33)',
         }
     },
     styles: {
@@ -14,5 +15,8 @@ export const customTheme = extendTheme({
                 'fontStyle': 'normal'
             }
         }
+    },
+    components: {
+        Card
     }
 })
