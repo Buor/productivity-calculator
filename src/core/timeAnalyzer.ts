@@ -1,9 +1,10 @@
-interface IAction {
+export interface IAction {
     name: string
-    startTime?: Date
+    startTime: Date
     endTime: Date
     nature: TNature
     type: TAction
+    durationMs: number
     description: string
 }
 
@@ -33,13 +34,19 @@ function parseActions(actionsString: string): IAction[] {
         }
 
         const actionRegExp = Array.from(stringAction.matchAll(/((?<startTimeHours>[012]?\d):(?<startTimeMinutes>[0-5]\d))?-(?<endTimeHours>[012]?\d):(?<endTimeMinutes>[0-5]\d)\)\s*(?<name>[^#.]+)\s*#?(?<nature>[PNnПНн])?(\.(?<type>\w+))?/g))[0]
-        // const actionRegExp = Array.from(stringAction.matchAll(/((?<startTimeHours>[012]?\d):(?<startTimeMinutes>[0-5]\d))?-(?<endTimeHours>[012]?\d):(?<endTimeMinutes>[0-5]\d)\)\s*(?<name>[^#.]+)\s#?(?<nature>[PNnПНн])?(\.(?<type>\w+))?/g))[0]
 
         validateActionString(stringAction, actionRegExp)
 
         //form actionObject
         const name = actionRegExp!.groups!.name
-        const startTime = new Date(0, 0, 0, +actionRegExp!.groups!.startTimeHours, +actionRegExp!.groups!.startTimeMinutes)
+        let startTime = new Date(0, 0, 0, +actionRegExp!.groups!.startTimeHours, +actionRegExp!.groups!.startTimeMinutes)
+
+        if (Number.isNaN(startTime.valueOf())) {
+            if (previousAction !== 0)
+                startTime = previousAction.endTime
+            else throw new Error(`Error! Start time of action "${name}" is not defined!`)
+        }
+
         const endTime = new Date(0, 0, 0, +actionRegExp!.groups!.endTimeHours, +actionRegExp!.groups!.endTimeMinutes)
         const type = actionRegExp!.groups!.type as TAction
 
@@ -51,7 +58,11 @@ function parseActions(actionsString: string): IAction[] {
         const natureLetter = actionRegExp!.groups!.nature
         const nature = natureLetterToNature(natureLetter)
 
-        const action: IAction = {name, startTime, endTime, nature, description: '', type: type || 'default'}
+        //calculate action duration
+
+        const durationMs = calculateDurationMs(startTime, endTime)
+
+        const action: IAction = {name, startTime, endTime, nature, description: '', type: type || 'default', durationMs}
         actions.push(action)
     }
 
@@ -92,12 +103,19 @@ function parseActions(actionsString: string): IAction[] {
     }
 }
 
-function getActionDuration(action: IAction, unit: 'm' | 's' | 'ms' = 'ms') {
-    let ms = action.startTime ? action.endTime.valueOf() - action.startTime.valueOf() : 0
+function calculateDurationMs(startTime: Date, endTime: Date) {
+    return endTime.valueOf() - startTime.valueOf()
+}
 
-    if (unit === 'ms') return ms
-    if (unit === 's') return ms / 1000
-    return Math.floor(ms / 1000 / 60)
+export function convertMs(ms: number, to: 'm' | 's') {
+    switch (to) {
+        case 's':
+            return ms / 1000
+        case 'm':
+            return Math.floor(ms / 1000 / 60)
+        default:
+            return ms
+    }
 }
 
 function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
@@ -106,10 +124,10 @@ function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
 
     const wholeDayTime = endDayTime.valueOf() - startDayTime!.valueOf()
 
-    let positiveActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let positiveActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + calculateDurationMs(action.startTime, action.endTime) : acc, 0)
     let positiveActionsPercentage = +(positiveActionsTime / wholeDayTime * 100).toFixed(2)
 
-    let negativeActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let negativeActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + calculateDurationMs(action.startTime, action.endTime) : acc, 0)
     let negativeActionsPercentage = +(negativeActionsTime / wholeDayTime * 100).toFixed(2)
 
     // let neutralActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
@@ -130,14 +148,14 @@ function calculateProductivity(actions: IAction[]): number {
         1 hour per day = +15
         +3 for every additional 15 minutes
     */
-    const sportDurationM = actions.reduce((acc, action) => action.type === 'sport' ? acc + getActionDuration(action, 'm') : acc, 0)
+    const sportDurationM = actions.reduce((acc, action) => action.type === 'sport' ? acc + convertMs(action.durationMs, 'm') : acc, 0)
     if (sportDurationM >= 60) productivityValue += 15 + Math.round((sportDurationM - 60) / 15) * 3
 
     /* Consider Positive actions
         6 minutes of any positive action = +1
         For every hour +5 in addition
     */
-    const positiveActionsDurationM = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action, 'm') : acc, 0)
+    const positiveActionsDurationM = actions.reduce((acc, action) => action.nature === 'positive' ? acc + convertMs(action.durationMs, 'm') : acc, 0)
     productivityValue += Math.floor(positiveActionsDurationM / 6) + Math.floor(positiveActionsDurationM / 60) * 5
 
     /* Consider Bedtime
