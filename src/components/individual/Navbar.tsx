@@ -21,6 +21,7 @@ export const Navbar: React.FC<IProps> = () => {
         >
             {routes.map(route => {
                 return <Button
+                    key={route.link}
                     flex={'1 1 200px'}
                     border={'0'}
                     backgroundColor={'custom.dark'}
@@ -29,7 +30,7 @@ export const Navbar: React.FC<IProps> = () => {
                     _hover={{
                         backgroundColor: 'custom.medium'
                     }}
-                    key={route.link}
+                    _focus={{border: '0'}}
                     onClick={() => navigate(route.link)}
                 >
                     {route.name}
