@@ -10,9 +10,10 @@ interface IProps {
 export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentage}) => {
 
     return (
-        <Box d={'flex'} justifyContent={'space-evenly'}
-             flexWrap={'wrap'} mt={4}>
-
+        <Box d={'flex'}
+             justifyContent={'space-evenly'}
+             flexWrap={'wrap'} mt={4}
+        >
             {actionsPercentage.map(percentage =>
                 <Card key={percentage.name}
                       flex={['0 1 80%', '0 1 25%']}
@@ -21,10 +22,25 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentage}) => {
                           cursor: 'pointer',
                           bg: 'custom.mediumDark'
                       }}
+                      opacity={0}
+                      animate={{opacity: 100}}
+                      transition={{delay: .1, duration: 7}}
+
                 >
-                    <Box color={'white'} as={'h3'} fontSize={24} textAlign={'center'}
-                         w={['auto', '150px']}>{percentage.name}</Box>
-                    <Box color={percentage.color || 'white'} mt={4} fontSize={24}>{percentage.percentage + '%'}</Box>
+                    <Box color={'white'}
+                         as={'h3'}
+                         fontSize={24}
+                         textAlign={'center'}
+                         w={['auto', '150px']}
+                    >
+                        {percentage.name}
+                    </Box>
+                    <Box color={percentage.color || 'white'}
+                         mt={4}
+                         fontSize={24}
+                    >
+                        {percentage.percentage + '%'}
+                    </Box>
                 </Card>)}
 
         </Box>
