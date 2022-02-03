@@ -112,13 +112,14 @@ function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
     let negativeActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
     let negativeActionsPercentage = +(negativeActionsTime / wholeDayTime * 100).toFixed(2)
 
-    let neutralActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    // let neutralActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let neutralActionsTime = wholeDayTime - positiveActionsTime - negativeActionsTime
     let neutralActionsPercentage = +(neutralActionsTime / wholeDayTime * 100).toFixed(2)
 
     return [
         {name: 'Positive actions', percentage: positiveActionsPercentage, color: 'green.500'},
-        {name: 'Negative actions', percentage: negativeActionsPercentage, color: 'yellow.500'},
-        {name: 'Neutral actions', percentage: neutralActionsPercentage, color: 'red.500'}
+        {name: 'Neutral actions', percentage: neutralActionsPercentage, color: 'yellow.500'},
+        {name: 'Negative actions', percentage: negativeActionsPercentage, color: 'red.500'}
     ]
 }
 
