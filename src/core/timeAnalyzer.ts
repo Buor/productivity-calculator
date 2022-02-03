@@ -55,7 +55,7 @@ function parseActions(actionsString: string): IAction[] {
         actions.push(action)
     }
 
-    if(actions.length === 0) throw new Error('Error! No actions found!')
+    if (actions.length === 0) throw new Error('Error! No actions found!')
 
     return actions
 
