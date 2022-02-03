@@ -7,10 +7,10 @@ interface IAction {
     description: string
 }
 
-export interface IActionsPercentage {
-    positiveActionsTime: number
-    negativeActionsTime: number
-    neutralActionsTime: number
+export interface IActionPercentage {
+    name: string,
+    percentage: number,
+    color?: string
 }
 
 type TNature = 'positive' | 'neutral' | 'negative'
@@ -100,21 +100,26 @@ function getActionDuration(action: IAction, unit: 'm' | 's' | 'ms' = 'ms') {
     return Math.floor(ms / 1000 / 60)
 }
 
-function calculateActionsPercentage(actions: IAction[]): IActionsPercentage {
+function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
     const startDayTime = actions[0].startTime
     const endDayTime = actions.slice(-1)[0].endTime
 
     const wholeDayTime = endDayTime.valueOf() - startDayTime!.valueOf()
 
     let positiveActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
-    let negativeActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
-    let neutralActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let positiveActionsPercentage = +(positiveActionsTime / wholeDayTime * 100).toFixed(2)
 
-    return {
-        positiveActionsTime: +(positiveActionsTime / wholeDayTime * 100).toFixed(2),
-        negativeActionsTime: +(negativeActionsTime / wholeDayTime * 100).toFixed(2),
-        neutralActionsTime: +(neutralActionsTime / wholeDayTime * 100).toFixed(2)
-    }
+    let negativeActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let negativeActionsPercentage = +(negativeActionsTime / wholeDayTime * 100).toFixed(2)
+
+    let neutralActionsTime = actions.reduce((acc, action) => action.nature === 'positive' ? acc + getActionDuration(action) : acc, 0)
+    let neutralActionsPercentage = +(neutralActionsTime / wholeDayTime * 100).toFixed(2)
+
+    return [
+        {name: 'Positive actions', percentage: positiveActionsPercentage, color: 'green.500'},
+        {name: 'Negative actions', percentage: negativeActionsPercentage, color: 'yellow.500'},
+        {name: 'Neutral actions', percentage: neutralActionsPercentage, color: 'red.500'}
+    ]
 }
 
 function calculateProductivity(actions: IAction[]): number {
@@ -149,7 +154,7 @@ function calculateProductivity(actions: IAction[]): number {
 }
 
 export interface IAnalyzeResult {
-    actionsPercentage: IActionsPercentage
+    actionsPercentage: IActionPercentage[]
     productivity: number
 }
 
