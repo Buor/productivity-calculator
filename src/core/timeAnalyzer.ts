@@ -174,7 +174,8 @@ function calculateProductivity(actions: IAction[]): number {
 
 export interface IAnalyzeResult {
     actionsPercentage: IActionPercentage[]
-    productivity: number
+    productivity: number,
+    actions: IAction[]
 }
 
 export function analyzeTime(actionsString: string): IAnalyzeResult {
@@ -182,8 +183,8 @@ export function analyzeTime(actionsString: string): IAnalyzeResult {
     const actions = parseActions(actionsString)
     const actionsPercentage = calculateActionsPercentage(actions)
     const productivity = calculateProductivity(actions)
-
     return {
+        actions,
         actionsPercentage,
         productivity
     }
