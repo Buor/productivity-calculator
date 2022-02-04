@@ -3,6 +3,7 @@ import {IAction, IActionPercentage} from '../../../../core/timeAnalyzer';
 import {Box} from '@chakra-ui/react';
 import {Card} from '../../../ui/Card';
 import {EfficiencyBlockActionsModal} from './EfficiencyBlockActionsModal';
+import {Title} from '../../../ui/Title';
 
 interface IProps {
     actionsPercentage: IActionPercentage[],
@@ -31,6 +32,7 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentage, actions}) 
 
     return (
         <>
+            <Title>Actions percentage:</Title>
             <Box d={'flex'}
                  justifyContent={'space-evenly'}
                  flexWrap={'wrap'} mt={4}
