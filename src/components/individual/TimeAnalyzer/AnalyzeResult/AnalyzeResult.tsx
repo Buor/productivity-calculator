@@ -12,7 +12,7 @@ interface IProps {
 export const AnalyzeResult: React.FC<IProps> = ({analyzeResult}) => {
     return (
         <Box>
-            <EfficiencyBlock actionsPercentage={analyzeResult.actionsPercentage}/>
+            <EfficiencyBlock actionsPercentage={analyzeResult.actionsPercentage} actions={analyzeResult.actions}/>
             <AdvicesBlock analyzeResult={analyzeResult}/>
             <ProductivityBlock productivity={analyzeResult.productivity}/>
         </Box>
