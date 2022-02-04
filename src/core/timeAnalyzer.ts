@@ -1,3 +1,5 @@
+import {calculateDurationMs, convertMs} from './utils/timeUtils';
+
 export interface IAction {
     name: string
     startTime: Date
@@ -103,21 +105,6 @@ function parseActions(actionsString: string): IAction[] {
     }
 }
 
-function calculateDurationMs(startTime: Date, endTime: Date) {
-    return endTime.valueOf() - startTime.valueOf()
-}
-
-export function convertMs(ms: number, to: 'm' | 's') {
-    switch (to) {
-        case 's':
-            return ms / 1000
-        case 'm':
-            return Math.floor(ms / 1000 / 60)
-        default:
-            return ms
-    }
-}
-
 function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
     const startDayTime = actions[0].startTime
     const endDayTime = actions.slice(-1)[0].endTime
@@ -148,14 +135,14 @@ function calculateProductivity(actions: IAction[]): number {
         1 hour per day = +15
         +3 for every additional 15 minutes
     */
-    const sportDurationM = actions.reduce((acc, action) => action.type === 'sport' ? acc + convertMs(action.durationMs, 'm') : acc, 0)
+    const sportDurationM = actions.reduce((acc, action) => action.type === 'sport' ? acc + +convertMs(action.durationMs, 'm') : acc, 0)
     if (sportDurationM >= 60) productivityValue += 15 + Math.round((sportDurationM - 60) / 15) * 3
 
     /* Consider Positive actions
         6 minutes of any positive action = +1
         For every hour +5 in addition
     */
-    const positiveActionsDurationM = actions.reduce((acc, action) => action.nature === 'positive' ? acc + convertMs(action.durationMs, 'm') : acc, 0)
+    const positiveActionsDurationM = actions.reduce((acc, action) => action.nature === 'positive' ? acc + +convertMs(action.durationMs, 'm') : acc, 0)
     productivityValue += Math.floor(positiveActionsDurationM / 6) + Math.floor(positiveActionsDurationM / 60) * 5
 
     /* Consider Bedtime
