@@ -58,7 +58,7 @@ export const EfficiencyBlockActionsModal: React.FC<IProps> = ({actions, close, a
                                     </Tr>)}
                                 </Tbody>
                             </Table>
-                            : `There are no ${actionsType}!`
+                            : `There are no ${actionsType}!` + (actionsType === 'Negative actions' ? ' Great job!' : '')
                     }
 
 
