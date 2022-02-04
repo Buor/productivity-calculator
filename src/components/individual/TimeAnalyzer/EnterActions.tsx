@@ -1,6 +1,7 @@
 import React from 'react'
-import {Box, Button, Text} from '@chakra-ui/react';
+import {Box, Button} from '@chakra-ui/react';
 import {NumeratedTextarea} from '../../ui/NumeratedTextarea';
+import {Title} from '../../ui/Title';
 
 interface IProps {
     actionsText: string
@@ -12,7 +13,7 @@ interface IProps {
 export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, handleAnalyzeButtonClick, error}) => {
     return (
         <Box d={'flex'} flexDirection={'column'}>
-            <Text textAlign={'center'} as={'h2'} fontSize={36}>Enter your actions!</Text>
+            <Title>Enter your actions!</Title>
             <Box mt={4} d={'flex'} justifyContent={'center'}>
                 <NumeratedTextarea textareaValue={actionsText} setTextareaValue={setActionsText}
                                    placeholder={'Enter your actions here'}/>
