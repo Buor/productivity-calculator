@@ -9,11 +9,22 @@ interface IProps {
 
 export const AdvicesBlock: React.FC<IProps> = ({advices}) => {
 
-
-
     return (
-        <Box>
-
-        </Box>
+        <Card mt={8}
+              maxW={500}
+              mx={['15px', 'auto']}
+              opacity={0}
+              animate={{opacity: 100}}
+              transition={{delay: .1, duration: 7}}
+        >
+            {advices.map((advice, i) => <Box d={'flex'} mt={i !== 0 ? 4 : 0}>
+                <Box flex={'0 0 20px'} textAlign={'center'}
+                     color={advice.mark === 'positive' ? 'green.500' : advice.mark === 'neutral' ? 'yellow.500' : 'red.500'}
+                >
+                    {advice.mark === 'positive' ? '✓' : advice.mark === 'neutral' ? '*' : '!'}
+                </Box>
+                <Box flexGrow={1}>{advice.text}</Box>
+            </Box>)}
+        </Card>
     )
 }
