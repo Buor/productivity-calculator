@@ -17,6 +17,11 @@ export interface IActionPercentage {
     actionsTime: number
 }
 
+export interface IAdvice {
+    text: string
+    mark: 'positive' | 'neutral' | 'negative'
+}
+
 type TNature = 'positive' | 'neutral' | 'negative'
 type TAction = 'sport' | 'default' | 'food' | 'sleep'
 const actionTypes = ['sport', 'default', 'food', 'sleep']
@@ -99,7 +104,6 @@ function parseActions(actionsString: string): IAction[] {
                 return 'negative'
             case 'n':
             case 'н':
-                return 'neutral'
             default:
                 return 'neutral'
         }
@@ -145,7 +149,7 @@ function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
     ]
 }
 
-function calculateProductivity(actions: IAction[]): number {
+function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActionPercentage[]): [number, IAdvice[]] {
     let productivityValue = 0
 
     /* Consider Sport
@@ -173,23 +177,96 @@ function calculateProductivity(actions: IAction[]): number {
     else if (bedtimeHour === 23) productivityValue += 15
     else if (bedtimeHour === 0) productivityValue += 10
 
-    return productivityValue
+    return [productivityValue, [getSportAdvice(), getActionsAdvice()]]
+
+    function getSportAdvice() {
+        let sportAdvice: IAdvice
+
+        if (sportDurationM >= 180)
+            sportAdvice = {
+                mark: 'positive',
+                text: `You have no equal! Wonderful work on the body and on yourself! Just don't overdo it with strength exercises, and you should also have a good rest.`
+            }
+        else if (sportDurationM >= 120)
+            sportAdvice = {
+                mark: 'positive',
+                text: 'Great job! Your body will thank you, the risk of many diseases is reduced. But don\'t overdo it!'
+            }
+        else if (sportDurationM >= 60)
+            sportAdvice = {
+                text: 'A healthy body has a healthy mind. Good job.',
+                mark: 'positive'
+            }
+        else if (sportDurationM >= 30)
+            sportAdvice = {
+                text: 'Not a bad job on the body, but you can clearly do better!',
+                mark: 'neutral'
+            }
+        else if (sportDurationM >= 0)
+            sportAdvice = {
+                text: 'Don\'t ignore health! This is one of the most important things in life, and it needs to be monitored so that every next day is better for you!',
+                mark: 'negative'
+            }
+        else throw new Error(`Can't generate sport Advice!`)
+
+        return sportAdvice
+    }
+
+    function getActionsAdvice() {
+        let actionsAdvice: IAdvice
+
+        let positiveActionsPercentage = actionsPercentages.find(ap => ap.name === 'Positive actions')
+        let negativeActionsPercentage = actionsPercentages.find(ap => ap.name === 'Negative actions')
+        if (!positiveActionsPercentage || !negativeActionsPercentage) throw new Error(`Error! Can't find positive or negative actions!`)
+
+        let [positiveActionsDurationMs, negativeActionsDurationMs] = [positiveActionsPercentage.actionsTime, negativeActionsPercentage.actionsTime]
+
+        if (positiveActionsDurationMs / negativeActionsDurationMs >= 4)
+            actionsAdvice = {
+                text: 'Positive actions exceed negative ones by 4 times or even more. You did a great job! Keep it up!',
+                mark: 'positive'
+            }
+        else if (positiveActionsDurationMs / negativeActionsDurationMs >= 2)
+            actionsAdvice = {
+                text: 'Positive actions exceed negative ones by 2 times. You did a good job!',
+                mark: 'positive'
+            }
+        else if (negativeActionsDurationMs / positiveActionsDurationMs > 4)
+            actionsAdvice = {
+                text: 'Negative actions exceed positive ones by 4 times. Don\'t let your hands go down! Remember that your actions today determine how all your future days will pass. Don\'t lose heart and go ahead!',
+                mark: 'negative'
+            }
+        else if (negativeActionsDurationMs / positiveActionsDurationMs > 2)
+            actionsAdvice = {
+                text: 'Negative actions exceed positive ones by 2 times. Do not lose faith in yourself and do not forget what you are trying for!',
+                mark: 'negative'
+            }
+        else actionsAdvice = {
+                text: 'Positive actions are approximately equal to negative ones in duration. You can do better!',
+                mark: 'neutral'
+            }
+
+        return actionsAdvice
+    }
 }
 
 export interface IAnalyzeResult {
     actionsPercentages: IActionPercentage[]
     productivity: number,
-    actions: IAction[]
+    actions: IAction[],
+    advices: IAdvice[]
 }
 
 export function analyzeTime(actionsString: string): IAnalyzeResult {
 
     const actions = parseActions(actionsString)
-    const actionsPercentage = calculateActionsPercentage(actions)
-    const productivity = calculateProductivity(actions)
+    const actionsPercentages = calculateActionsPercentage(actions)
+    const [productivity, advices] = getProductivityAndAdvices(actions, actionsPercentages)
+
     return {
         actions,
-        actionsPercentage,
-        productivity
+        actionsPercentages,
+        productivity,
+        advices
     }
 }
