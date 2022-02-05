@@ -12,7 +12,8 @@ export const customTheme = extendTheme({
         global: {
             body: {
                 'fontFamily': 'Segoe UI, sans-serif',
-                'fontStyle': 'normal'
+                'fontStyle': 'normal',
+                'bg' : 'custom.dark'
             }
         }
     },
