@@ -1,12 +1,16 @@
 import React from 'react'
 import {Box} from '@chakra-ui/react';
-import {IAnalyzeResult} from '../../../../core/timeAnalyzer';
+import {IAdvice} from '../../../../core/timeAnalyzer';
+import {Card} from '../../../ui/Card';
 
 interface IProps {
-    analyzeResult: IAnalyzeResult
+    advices: IAdvice[]
 }
 
-export const AdvicesBlock: React.FC<IProps> = () => {
+export const AdvicesBlock: React.FC<IProps> = ({advices}) => {
+
+
+
     return (
         <Box>
 
