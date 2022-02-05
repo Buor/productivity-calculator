@@ -14,6 +14,7 @@ export interface IActionPercentage {
     name: string,
     percentage: number,
     color?: string
+    actionsTime: number
 }
 
 type TNature = 'positive' | 'neutral' | 'negative'
@@ -121,10 +122,26 @@ function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
     let neutralActionsTime = wholeDayTime - positiveActionsTime - negativeActionsTime
     let neutralActionsPercentage = +(neutralActionsTime / wholeDayTime * 100).toFixed(2)
 
+    // WARNING! Name changing will break the program!
     return [
-        {name: 'Positive actions', percentage: positiveActionsPercentage, color: 'green.500'},
-        {name: 'Neutral actions', percentage: neutralActionsPercentage, color: 'yellow.500'},
-        {name: 'Negative actions', percentage: negativeActionsPercentage, color: 'red.500'}
+        {
+            name: 'Positive actions',
+            percentage: positiveActionsPercentage,
+            actionsTime: positiveActionsTime,
+            color: 'green.500'
+        },
+        {
+            name: 'Neutral actions',
+            percentage: neutralActionsPercentage,
+            actionsTime: neutralActionsTime,
+            color: 'yellow.500'
+        },
+        {
+            name: 'Negative actions',
+            percentage: negativeActionsPercentage,
+            actionsTime: negativeActionsTime,
+            color: 'red.500'
+        }
     ]
 }
 
@@ -160,7 +177,7 @@ function calculateProductivity(actions: IAction[]): number {
 }
 
 export interface IAnalyzeResult {
-    actionsPercentage: IActionPercentage[]
+    actionsPercentages: IActionPercentage[]
     productivity: number,
     actions: IAction[]
 }
