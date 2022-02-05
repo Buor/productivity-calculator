@@ -6,11 +6,11 @@ import {EfficiencyBlockActionsModal} from './EfficiencyBlockActionsModal';
 import {Title} from '../../../ui/Title';
 
 interface IProps {
-    actionsPercentage: IActionPercentage[],
+    actionsPercentages: IActionPercentage[],
     actions: IAction[]
 }
 
-export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentage, actions}) => {
+export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions}) => {
 
     const [modalActionsType, setModalActionsType] = useState<null | string>(null)
 
@@ -32,12 +32,12 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentage, actions}) 
 
     return (
         <>
-            <Title>Actions percentage:</Title>
+            <Title>Results:</Title>
             <Box d={'flex'}
                  justifyContent={'space-evenly'}
                  flexWrap={'wrap'} mt={4}
             >
-                {actionsPercentage.map(percentage =>
+                {actionsPercentages.map(percentage =>
                     <Card key={percentage.name}
                           flex={['0 1 80%', '0 1 25%']}
                           mt={[4, null, 0]}
