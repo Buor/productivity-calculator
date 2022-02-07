@@ -222,23 +222,23 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
         let [positiveActionsDurationMs, negativeActionsDurationMs] = [positiveActionsPercentage.actionsTime, negativeActionsPercentage.actionsTime]
 
         if (positiveActionsDurationMs / negativeActionsDurationMs >= 4) {
-            actionsAdvice.text = 'Positive actions exceed negative ones by 4 times or even more. You did a great job! Keep it up!',
+            actionsAdvice.text = 'Positive actions exceed negative ones by 4 times or even more. You did a great job! Keep it up!'
             actionsAdvice.mark = 'positive'
         }
         else if (positiveActionsDurationMs / negativeActionsDurationMs >= 2) {
-            actionsAdvice.text = 'Positive actions exceed negative ones by 2 times. You did a good job!',
+            actionsAdvice.text = 'Positive actions exceed negative ones by 2 times. You did a good job!'
             actionsAdvice.mark = 'positive'
         }
         else if (negativeActionsDurationMs / positiveActionsDurationMs > 4) {
-            actionsAdvice.text = 'Negative actions exceed positive ones by 4 times. Don\'t let your hands go down! Remember that your actions today determine how all your future days will pass. Don\'t lose heart and go ahead!',
+            actionsAdvice.text = 'Negative actions exceed positive ones by 4 times. Don\'t let your hands go down! Remember that your actions today determine how all your future days will pass. Don\'t lose heart and go ahead!'
             actionsAdvice.mark = 'negative'
         }
         else if (negativeActionsDurationMs / positiveActionsDurationMs > 2) {
-            actionsAdvice.text = 'Negative actions exceed positive ones by 2 times. Do not lose faith in yourself and do not forget what you are trying for!',
+            actionsAdvice.text = 'Negative actions exceed positive ones by 2 times. Do not lose faith in yourself and do not forget what you are trying for!'
             actionsAdvice.mark = 'negative'
         }
         else {
-                actionsAdvice.text = 'Positive actions are approximately equal to negative ones in duration. You can do better!',
+                actionsAdvice.text = 'Positive actions are approximately equal to negative ones in duration. You can do better!'
                 actionsAdvice.mark = 'neutral'
             }
         return actionsAdvice
