@@ -1,12 +1,21 @@
-import { Box } from '@chakra-ui/react';
-import React from 'react';
+import React, {useState} from 'react';
+import {ManualModal} from "./ManualModal";
+import {ManualButtonOpen} from "./ManualButtonOpen";
 
 interface IProps {
 
 }
 
 export const Manual: React.FC<IProps> = () => {
-    return <Box minW={50} minH={50} bg={'custom.medium'} _hover={{bg: 'custom.mediumDark'}} cursor='pointer' position='fixed' right='0' bottom='0' textAlign='center'  borderTopLeftRadius={10}>
-        <Box d='flex' justifyContent='center' alignItems='center' w='100%' h='50px' fontSize={34} transform='rotate(315deg)' color='yellow.500'>?</Box>
-    </Box>
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    const open = () => setIsModalOpen(true)
+    const close = () => setIsModalOpen(false)
+
+    return <>
+        <ManualButtonOpen onClick={open}/>
+        <ManualModal onClose={close} isModalOpen={isModalOpen}/>
+    </>
+
 }
