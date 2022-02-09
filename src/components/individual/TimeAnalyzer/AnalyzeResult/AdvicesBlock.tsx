@@ -11,6 +11,7 @@ export const AdvicesBlock: React.FC<IProps> = ({advices}) => {
 
     return (
         <Card mt={8}
+              alignItems={'flexStart'}
               maxW={500}
               mx={['15px', 'auto']}
               opacity={0}
