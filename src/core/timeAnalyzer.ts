@@ -204,7 +204,7 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
             }
         else if (sportDurationM >= 0)
             sportAdvice = {
-                text: 'Don\'t ignore health! This is one of the most important things in life, and it needs to be monitored so that every next day is better for you!',
+                text: 'Don\'t ignore health and sport! This is one of the most important things in life, and it needs to be monitored so that every next day is better for you!',
                 mark: 'negative'
             }
         else throw new Error(`Can't generate sport Advice!`)
