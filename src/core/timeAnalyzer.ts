@@ -177,7 +177,7 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
     else if (bedtimeHour === 23) productivityValue += 15
     else if (bedtimeHour === 0) productivityValue += 10
 
-    return [productivityValue, [getSportAdvice(), getActionsAdvice()]]
+    return [productivityValue, [getSportAdvice(), getActionsAdvice(), getSleepAdvice()]]
 
     function getSportAdvice() {
         let sportAdvice: IAdvice
@@ -224,24 +224,37 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
         if (positiveActionsDurationMs / negativeActionsDurationMs >= 4) {
             actionsAdvice.text = 'Positive actions exceed negative ones by 4 times or even more. You did a great job! Keep it up!'
             actionsAdvice.mark = 'positive'
-        }
-        else if (positiveActionsDurationMs / negativeActionsDurationMs >= 2) {
+        } else if (positiveActionsDurationMs / negativeActionsDurationMs >= 2) {
             actionsAdvice.text = 'Positive actions exceed negative ones by 2 times. You did a good job!'
             actionsAdvice.mark = 'positive'
-        }
-        else if (negativeActionsDurationMs / positiveActionsDurationMs > 4) {
+        } else if (negativeActionsDurationMs / positiveActionsDurationMs > 4) {
             actionsAdvice.text = 'Negative actions exceed positive ones by 4 times. Don\'t let your hands go down! Remember that your actions today determine how all your future days will pass. Don\'t lose heart and go ahead!'
             actionsAdvice.mark = 'negative'
-        }
-        else if (negativeActionsDurationMs / positiveActionsDurationMs > 2) {
+        } else if (negativeActionsDurationMs / positiveActionsDurationMs > 2) {
             actionsAdvice.text = 'Negative actions exceed positive ones by 2 times. Do not lose faith in yourself and do not forget what you are trying for!'
             actionsAdvice.mark = 'negative'
+        } else {
+            actionsAdvice.text = 'Positive actions are approximately equal to negative ones in duration. You can do better!'
+            actionsAdvice.mark = 'neutral'
         }
-        else {
-                actionsAdvice.text = 'Positive actions are approximately equal to negative ones in duration. You can do better!'
-                actionsAdvice.mark = 'neutral'
-            }
         return actionsAdvice
+    }
+
+    function getSleepAdvice() {
+        let sleepAdvice: IAdvice
+
+        if (bedtimeHour <= 23)
+            sleepAdvice = {
+                text: `You went to bed on time! Good job!`,
+                mark: 'positive'
+            }
+        else
+            sleepAdvice = {
+                text: `Napping is essential for healthy life. Try to go to sleep before 23:00 or even earlier!`,
+                mark: `neutral`
+            }
+
+        return sleepAdvice
     }
 }
 
