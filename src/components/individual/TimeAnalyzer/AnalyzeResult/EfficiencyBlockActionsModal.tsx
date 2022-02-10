@@ -20,6 +20,7 @@ import {
     Tr
 } from '@chakra-ui/react';
 import {convertMs} from '../../../../core/utils/timeUtils';
+import {ModalAction} from "./ModalAction";
 
 type TDisplayMode = 'Time sum' | 'All actions'
 
@@ -80,11 +81,7 @@ export const EfficiencyBlockActionsModal: React.FC<IProps> = ({actions, close, a
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {actionsToShow.map(action => <Tr key={action.endTime.toString()}>
-                                            <Td minWidth={131}>{action.startTime.getHours() + ':' + ('0' + action.startTime.getMinutes()).slice(-2) + '-' + action.endTime.getHours() + ':' + ('0' + action.endTime.getMinutes()).slice(-2)}</Td>
-                                            <Td>{action.name}</Td>
-                                            <Td>{action.type.toUpperCase()}</Td>
-                                        </Tr>)}
+                                        {actionsToShow.map(action => <ModalAction action={action} key={action.endTime.valueOf()}/>)}
                                     </Tbody>
                                 </Table>
                             : `There are no ${actionsType}!` + (actionsType === 'Negative actions' ? ' Great job!' : '')
