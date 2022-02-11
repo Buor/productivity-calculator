@@ -23,6 +23,7 @@ import {convertMs} from '../../../../core/utils/timeUtils';
 import {ModalAction} from "./ModalAction";
 
 type TDisplayMode = 'Time sum' | 'All actions'
+type TOrder = 'Descending' | 'Ascending'
 
 interface IProps {
     actions: IAction[]
@@ -30,13 +31,28 @@ interface IProps {
     actionsType: string
 }
 
+function compareActionsWithOrder(order: TOrder) {
+    if(order === "Ascending") return function (a: IAction, b: IAction) {
+        return a.durationMs - b.durationMs
+    }
+    return function (a: IAction, b: IAction) {
+        return b.durationMs - a.durationMs
+    }
+}
+
 export const EfficiencyBlockActionsModal: React.FC<IProps> = ({actions, close, actionsType}) => {
 
     const [displayMode, setDisplayMode] = useState<TDisplayMode>('Time sum')
+    const [order, setOrder] = useState<TOrder>('Descending')
 
     let counter = 1
 
-    const actionsToShow = displayMode === 'Time sum' ? actions.sort((a, b) => b.durationMs - a.durationMs) : actions.sort((a, b) => a.startTime.valueOf() - b.startTime.valueOf())
+    const actionsToShow = (() => {
+        if (displayMode === 'Time sum')
+            return actions.sort(compareActionsWithOrder(order))
+        else
+            return actions.sort((a, b) => a.startTime.valueOf() - b.startTime.valueOf())
+    })()
 
     return (
         <Modal isOpen={true} onClose={() => close()}>
@@ -50,6 +66,15 @@ export const EfficiencyBlockActionsModal: React.FC<IProps> = ({actions, close, a
                         <option value="Time sum">Time sum</option>
                         <option value="All actions">All actions</option>
                     </Select>
+                    {
+                        displayMode === 'Time sum' && <>
+                            <Text pl={4} mb={2} mt={4}>Select order:</Text>
+                            <Select value={order} onChange={e => setOrder(e.target.value as TOrder)}>
+                                <option value="Ascending">Ascending</option>
+                                <option value="Descending">Descending</option>
+                            </Select>
+                        </>
+                    }
                     {
                         actions.length
                             ?
@@ -81,7 +106,8 @@ export const EfficiencyBlockActionsModal: React.FC<IProps> = ({actions, close, a
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {actionsToShow.map(action => <ModalAction action={action} key={action.endTime.valueOf()}/>)}
+                                        {actionsToShow.map(action => <ModalAction action={action}
+                                                                                  key={action.endTime.valueOf()}/>)}
                                     </Tbody>
                                 </Table>
                             : `There are no ${actionsType}!` + (actionsType === 'Negative actions' ? ' Great job!' : '')
