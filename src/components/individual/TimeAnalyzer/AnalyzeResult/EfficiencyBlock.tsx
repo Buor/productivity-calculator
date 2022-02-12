@@ -4,6 +4,7 @@ import {Box} from '@chakra-ui/react';
 import {Card} from '../../../ui/Card';
 import {EfficiencyBlockActionsModal} from './EfficiencyBlockActionsModal';
 import {Title} from '../../../ui/Title';
+import {SearchIcon} from "@chakra-ui/icons";
 
 interface IProps {
     actionsPercentages: IActionPercentage[],
@@ -63,6 +64,9 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
                              fontSize={24}
                         >
                             {percentage.percentage + '%'}
+                        </Box>
+                        <Box mt={4}>
+                            <SearchIcon/> Click to examine!
                         </Box>
                     </Card>)}
             </Box>
