@@ -1,4 +1,4 @@
-import {calculateDurationMs} from './utils/timeUtils';
+import {calculateDurationMs} from '../utils/timeUtils';
 import {dealWithActions, dealWithSleep, dealWithSport} from "./dealings";
 import {getProductivity} from "./getProductivity";
 

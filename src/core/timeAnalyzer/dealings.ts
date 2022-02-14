@@ -1,5 +1,5 @@
-import {convertMs} from "./utils/timeUtils";
-import {IAction, IActionPercentage, IAdvice} from "./timeAnalyzer";
+import {convertMs} from "../utils/timeUtils";
+import {IAction, IActionPercentage, IAdvice} from "./index";
 
 export function dealWithSport(actions: IAction[]): [number, IAdvice] {
     /* Sport productivity impact

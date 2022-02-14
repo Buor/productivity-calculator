@@ -1,4 +1,4 @@
-import {IProductivity} from "./timeAnalyzer";
+import {IProductivity} from "./index";
 
 export function getProductivity(productivityValue: number): IProductivity {
     if (productivityValue <= 20) return {color: 'red.500', comment: 'Bad productivity!', value: productivityValue}
