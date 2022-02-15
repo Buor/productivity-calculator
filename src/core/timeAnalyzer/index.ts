@@ -162,7 +162,9 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
     const advices: IAdvice[] = [];
 
     //Form advices and increase productivityValue
-    [dealWithSport(actions), dealWithActions(actions, actionsPercentages), dealWithSleep(actions)]
+    [dealWithSport(actions), dealWithActions(actions, actionsPercentages), dealWithSleep(actions),
+        // dealWithFood(actions)
+    ]
         .forEach(entry => {
             productivityValue += entry[0]
             advices.push(entry[1])

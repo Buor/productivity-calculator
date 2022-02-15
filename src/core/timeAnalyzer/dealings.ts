@@ -111,3 +111,12 @@ export function dealWithSleep(actions: IAction[]): [number, IAdvice] {
         }
     return [productivityValueMagnifier, advice]
 }
+
+export function dealWithFood(actions: IAction[]) {
+    let junkFoodCount = 0
+    let junkFoodRegExp = /#(вреднаяЕда|junkFood)/
+    //todo implement
+    // actions.forEach(action => {
+    //
+    // })
+}
