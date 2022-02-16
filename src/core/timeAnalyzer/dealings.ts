@@ -112,11 +112,39 @@ export function dealWithSleep(actions: IAction[]): [number, IAdvice] {
     return [productivityValueMagnifier, advice]
 }
 
-export function dealWithFood(actions: IAction[]) {
-    let junkFoodCount = 0
-    let junkFoodRegExp = /#(вреднаяЕда|junkFood)/
-    //todo implement
-    // actions.forEach(action => {
-    //
-    // })
+export function dealWithFood(actions: IAction[]): [number, IAdvice] {
+    let productivityValueMagnifier = 0
+
+    let junkFoodRegExp = /#(вреднаяЕда|junkFood)=([1-9]\d*)/
+
+    actions.forEach(action => {
+        const matched = action.description.match(junkFoodRegExp)
+        if(matched !== null) {
+            const junkFoodCount = +matched[2]
+            productivityValueMagnifier += junkFoodCount * -5
+
+            action.description = action.description.replace(matched[0], '')
+        }
+    })
+
+    let advice: IAdvice
+
+    if(productivityValueMagnifier === 0) {
+        advice = {
+            text: `Great job! You haven't eat anything bad today!`,
+            mark: `positive`
+        }
+    } else if(productivityValueMagnifier <= 15) {
+        advice = {
+            text: `You've eaten some bad food today. Try to not do this again!`,
+            mark: 'neutral'
+        }
+    } else {
+        advice = {
+            text: `You've eaten a lot of bad food today! Try to not do this again!`,
+            mark: 'negative'
+        }
+    }
+
+    return [productivityValueMagnifier, advice]
 }

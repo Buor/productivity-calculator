@@ -1,5 +1,5 @@
 import {calculateDurationMs} from '../utils/timeUtils';
-import {dealWithActions, dealWithSleep, dealWithSport} from "./dealings";
+import {dealWithActions, dealWithFood, dealWithSleep, dealWithSport} from "./dealings";
 import {getProductivity} from "./getProductivity";
 
 export interface IAction {
@@ -162,9 +162,7 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
     const advices: IAdvice[] = [];
 
     //Form advices and increase productivityValue
-    [dealWithSport(actions), dealWithActions(actions, actionsPercentages), dealWithSleep(actions),
-        // dealWithFood(actions)
-    ]
+    [dealWithSport(actions), dealWithActions(actions, actionsPercentages), dealWithSleep(actions), dealWithFood(actions)]
         .forEach(entry => {
             productivityValue += entry[0]
             advices.push(entry[1])
