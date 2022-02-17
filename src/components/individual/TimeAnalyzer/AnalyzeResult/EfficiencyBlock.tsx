@@ -17,9 +17,12 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
 
     const actionsPart = useMemo(() => {
         switch (modalActionsType) {
-            case 'Positive actions': return actions.filter(action => action.nature === 'positive')
-            case 'Negative actions': return actions.filter(action => action.nature === 'negative')
-            default: return actions.filter(action => action.nature === 'neutral')
+            case 'Positive actions':
+                return actions.filter(action => action.nature === 'positive')
+            case 'Negative actions':
+                return actions.filter(action => action.nature === 'negative')
+            default:
+                return actions.filter(action => action.nature === 'neutral')
         }
     }, [modalActionsType])
 
@@ -70,7 +73,8 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
                         </Box>
                     </Card>)}
             </Box>
-            {modalActionsType && <EfficiencyBlockActionsModal actions={actionsPart} actionsType={modalActionsType} close={closeModal}/>}
+            {modalActionsType &&
+                <EfficiencyBlockActionsModal actions={actionsPart} actionsType={modalActionsType} close={closeModal}/>}
         </>
     )
 }
