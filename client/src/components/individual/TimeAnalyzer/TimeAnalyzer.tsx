@@ -8,9 +8,18 @@ interface IProps {
 }
 
 export const TimeAnalyzer: React.FC<IProps> = () => {
-
     const [actionsText, setActionsText] = useState('')
     const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>(null)
+    // todo delete (mock data for test purposes)
+    // const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>({
+    //     productivity: 5,
+    //     actionsPercentage: [
+    //         {name: 'Positive actions', percentage: 44, color: 'green.500'},
+    //         {name: 'Neutral actions', percentage: 22, color: 'yellow.500'},
+    //         {name: 'Negative actions', percentage: 34, color: 'red.500'},
+    //     ],
+    //     actions: []
+    // })
     const [enterActionsError, setEnterActionsError] = useState<Error | null>(null)
 
     const analyze = () => {
