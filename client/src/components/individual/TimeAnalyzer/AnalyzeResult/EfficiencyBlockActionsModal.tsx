@@ -32,7 +32,7 @@ interface IProps {
 }
 
 function compareActionsWithOrder(order: TOrder) {
-    if(order === "Ascending") return function (a: IAction, b: IAction) {
+    if (order === "Ascending") return function (a: IAction, b: IAction) {
         return a.durationMs - b.durationMs
     }
     return function (a: IAction, b: IAction) {
