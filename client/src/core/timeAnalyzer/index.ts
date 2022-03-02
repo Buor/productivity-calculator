@@ -36,7 +36,15 @@ const actionTypes = ['sport', 'default', 'food', 'sleep']
 
 function parseActions(actionsString: string): IAction[] {
     const stringActions = actionsString.split('\n')
+    if(stringActions.length < 2) throw new Error(`Error! Strings amount is too low!`)
+
     const actions: IAction[] = []
+
+    //Define date first
+    const date = stringActions.shift()
+    const dateData = date!.match(/(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.([2-9]\d{3})/)
+
+    validateDate(dateData as Array<string | undefined>)
 
     for (let stringAction of stringActions) {
         if (stringAction === '') continue
@@ -82,7 +90,7 @@ function parseActions(actionsString: string): IAction[] {
         actions.push(action)
     }
 
-    if (actions.length === 0) throw new Error('Error! No actions found!')
+    if (actions.length === 0 || actions.length === 1) throw new Error('Error! No actions found!')
 
     return actions
 
@@ -115,6 +123,11 @@ function parseActions(actionsString: string): IAction[] {
             default:
                 return 'neutral'
         }
+    }
+
+    function validateDate(dateData: Array<string | undefined> | null) {
+        if(!dateData) throw new Error(`Error! Date was not provided or it's incorrect!`)
+        if(!dateData[0] || !dateData[1] || !dateData[2]) throw new Error(`Error! Invalid data provided!`)
     }
 }
 
