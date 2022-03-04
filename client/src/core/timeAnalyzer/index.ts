@@ -34,7 +34,7 @@ type TNature = 'positive' | 'neutral' | 'negative'
 type TAction = 'sport' | 'default' | 'food' | 'sleep'
 const actionTypes = ['sport', 'default', 'food', 'sleep']
 
-function parseActions(actionsString: string): IAction[] {
+function getActionsAndDate(actionsString: string): [IAction[], Date] {
     const stringActions = actionsString.split('\n')
     if (stringActions.length < 2) throw new Error(`Error! Strings amount is too low!`)
 
@@ -43,7 +43,7 @@ function parseActions(actionsString: string): IAction[] {
 
     if (actions.length === 0) throw new Error('Error! No actions found!')
 
-    return actions
+    return [actions, date]
 
     function getDate(stringActions: string[]): Date {
         const date = stringActions.shift()
@@ -208,12 +208,13 @@ export interface IAnalyzeResult {
     actionsPercentages: IActionPercentage[]
     productivity: IProductivity,
     actions: IAction[],
-    advices: IAdvice[]
+    advices: IAdvice[],
+    date: Date
 }
 
 export function analyzeTime(actionsString: string): IAnalyzeResult {
 
-    const actions = parseActions(actionsString)
+    const [actions, date] = getActionsAndDate(actionsString)
     const actionsPercentages = calculateActionsPercentage(actions)
     const [productivity, advices] = getProductivityAndAdvices(actions, actionsPercentages)
 
@@ -221,6 +222,7 @@ export function analyzeTime(actionsString: string): IAnalyzeResult {
         actions,
         actionsPercentages,
         productivity,
-        advices
+        advices,
+        date
     }
 }
