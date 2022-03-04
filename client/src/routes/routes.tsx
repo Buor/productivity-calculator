@@ -1,7 +1,7 @@
 import React from "react"
 import {TimeAnalyzer} from "../components/individual/TimeAnalyzer/TimeAnalyzer"
 import {Main} from '../components/individual/Main';
-import {Calendar} from "../components/individual/Calendar/Calendar";
+import {CalendarPage} from "../components/individual/Calendar/CalendarPage";
 
 export interface IRoute {
     link: string
@@ -23,6 +23,6 @@ export const routes: IRoute[] = [
     {
         link: '/calendar',
         name: 'Calendar',
-        component: <Calendar/>
+        component: <CalendarPage/>
     }
 ]
