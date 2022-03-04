@@ -1,7 +1,7 @@
 import React from "react"
 import {TimeAnalyzer} from "../components/individual/TimeAnalyzer/TimeAnalyzer"
 import {Main} from '../components/individual/Main';
-import {CalendarPage} from "../components/individual/Calendar/CalendarPage";
+import {CalendarPage} from "../components/individual/CalendarPage/CalendarPage";
 
 export interface IRoute {
     link: string
