@@ -1,5 +1,5 @@
 import {Box, Text} from "@chakra-ui/react";
-import {Calendar} from "./Calendar";
+import {Calendar} from "./Calendar/Calendar";
 
 export const CalendarPage: React.FC = () => {
     return <Box>
