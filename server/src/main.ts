@@ -14,7 +14,7 @@ async function bootstrap() {
 function checkFolders() {
     if(!fs.existsSync('./saves') || !fs.existsSync('./saves/days'))
         fs.mkdirSync('./saves/days',{recursive: true})
-
+    console.log('a')
 }
 
 bootstrap()
