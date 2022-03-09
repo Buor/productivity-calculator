@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {IAction} from "../../../../core/timeAnalyzer";
 import {Box, Td, Tr} from "@chakra-ui/react";
+import {IAction} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     action: IAction

@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import {IAction} from '../../../../core/timeAnalyzer';
 import {
     Button,
     Modal,
@@ -21,6 +20,7 @@ import {
 } from '@chakra-ui/react';
 import {convertMs} from '../../../../core/utils/timeUtils';
 import {ModalAction} from "./ModalAction";
+import {IAction} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
 
 type TDisplayMode = 'Time sum' | 'All actions'
 type TOrder = 'Descending' | 'Ascending'

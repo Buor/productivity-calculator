@@ -1,9 +1,9 @@
 import React from 'react'
 import {Box} from '@chakra-ui/react';
-import {IAnalyzeResult} from '../../../../core/timeAnalyzer';
 import {EfficiencyBlock} from './EfficiencyBlock';
 import {AdvicesBlock} from './AdvicesBlock';
 import {ProductivityBlock} from './ProductivityBlock';
+import {IAnalyzeResult} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     analyzeResult: IAnalyzeResult

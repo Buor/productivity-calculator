@@ -1,37 +1,15 @@
 import {calculateDurationMs} from '../utils/timeUtils';
 import {dealWithActions, dealWithFood, dealWithSleep, dealWithSport} from "./dealings";
 import {getProductivity} from "./getProductivity";
+import {
+    IAction,
+    IActionPercentage,
+    IAdvice, IAnalyzeResult,
+    IProductivity,
+    TAction,
+    TNature
+} from "../../../../server/commonTypes/timeAnalyzerTypes";
 
-export interface IAction {
-    name: string
-    startTime: Date
-    endTime: Date
-    nature: TNature
-    type: TAction
-    durationMs: number
-    description: string
-}
-
-export interface IActionPercentage {
-    name: string,
-    percentage: number,
-    color?: string
-    actionsTime: number
-}
-
-export interface IAdvice {
-    text: string
-    mark: 'positive' | 'neutral' | 'negative'
-}
-
-export interface IProductivity {
-    value: number
-    comment: string,
-    color: string
-}
-
-type TNature = 'positive' | 'neutral' | 'negative'
-type TAction = 'sport' | 'default' | 'food' | 'sleep'
 const actionTypes = ['sport', 'default', 'food', 'sleep']
 
 function getActionsAndDate(actionsString: string): [IAction[], Date] {
@@ -202,14 +180,6 @@ function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActi
     const productivity = getProductivity(productivityValue)
 
     return [productivity, advices]
-}
-
-export interface IAnalyzeResult {
-    actionsPercentages: IActionPercentage[]
-    productivity: IProductivity,
-    actions: IAction[],
-    advices: IAdvice[],
-    date: Date
 }
 
 export function analyzeTime(actionsString: string): IAnalyzeResult {

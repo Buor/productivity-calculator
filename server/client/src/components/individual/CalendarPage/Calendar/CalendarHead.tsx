@@ -1,3 +1,4 @@
+import React from "react";
 import {Box, Button, Img, Text} from "@chakra-ui/react";
 import imgDownArrow from './../../../../assets/images/down-arrow.png'
 
