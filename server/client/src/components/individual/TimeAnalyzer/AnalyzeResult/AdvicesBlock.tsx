@@ -1,7 +1,7 @@
 import React from 'react'
 import {Box} from '@chakra-ui/react';
 import {Card} from '../../../ui/Card';
-import {IAdvice} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
+import {IAdvice} from "../../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     advices: IAdvice[]

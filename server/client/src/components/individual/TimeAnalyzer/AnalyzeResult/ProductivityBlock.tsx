@@ -1,7 +1,7 @@
 import React from 'react'
 import {Text} from '@chakra-ui/react';
 import {Card} from "../../../ui/Card";
-import {IProductivity} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
+import {IProductivity} from "../../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     productivity: IProductivity

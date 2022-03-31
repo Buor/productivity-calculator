@@ -4,10 +4,10 @@ import {Card} from '../../../ui/Card';
 import {EfficiencyBlockActionsModal} from './EfficiencyBlockActionsModal';
 import {Title} from '../../../ui/Title';
 import {SearchIcon} from "@chakra-ui/icons";
-import {IAction, IActionPercentage} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
+import {IAction, IActionPercentages} from "../../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
-    actionsPercentages: IActionPercentage[],
+    actionsPercentages: IActionPercentages,
     actions: IAction[]
 }
 
@@ -41,8 +41,8 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
                  justifyContent={'space-evenly'}
                  flexWrap={'wrap'} mt={4}
             >
-                {actionsPercentages.map(percentage =>
-                    <Card key={percentage.name}
+                {Object.entries(actionsPercentages).map(percentage =>
+                    <Card key={percentage[0]}
                           flex={['0 1 80%', '0 1 25%']}
                           mt={[4, null, 0]}
                           _hover={{
@@ -52,7 +52,7 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
                           opacity={0}
                           animate={{opacity: 100}}
                           transition={{delay: .1, duration: 7}}
-                          onClick={() => handleCardClick(percentage.name)}
+                          onClick={() => handleCardClick(percentage[1].name)}
                     >
                         <Box color={'white'}
                              as={'h3'}
@@ -60,13 +60,13 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
                              textAlign={'center'}
                              w={['auto', '150px']}
                         >
-                            {percentage.name}
+                            {percentage[0]}
                         </Box>
-                        <Box color={percentage.color || 'white'}
+                        <Box color={percentage[1].color || 'white'}
                              mt={4}
                              fontSize={24}
                         >
-                            {percentage.percentage + '%'}
+                            {percentage[1].percentage + '%'}
                         </Box>
                         <Box mt={4}>
                             <SearchIcon/> Click to examine!
