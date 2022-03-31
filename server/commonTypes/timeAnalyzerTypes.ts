@@ -10,8 +10,13 @@ export interface IAction {
     description: string
 }
 
+export interface IActionPercentages {
+    positive: IActionPercentage
+    neutral: IActionPercentage
+    negative: IActionPercentage
+}
+
 export interface IActionPercentage {
-    name: string,
     percentage: number,
     color?: string
     actionsTime: number
@@ -28,7 +33,7 @@ export interface IProductivity {
     color: string
 }
 export interface IAnalyzeResult {
-    actionsPercentages: IActionPercentage[]
+    actionsPercentages: IActionPercentages
     productivity: IProductivity,
     actions: IAction[],
     advices: IAdvice[],

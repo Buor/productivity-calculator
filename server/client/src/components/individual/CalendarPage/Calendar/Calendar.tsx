@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {monthNames} from "../../../../core/utils/timeUtils";
 import {CalendarDays} from "./CalendarDays";
 import axios from "axios";
-import {IAnalyzeResult} from "../../../../../../server/commonTypes/timeAnalyzerTypes";
+import {IAnalyzeResult} from "../../../../../../commonTypes/timeAnalyzerTypes";
 
 export const Calendar: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState<Date | null>()

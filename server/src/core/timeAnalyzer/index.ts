@@ -1,14 +1,15 @@
-import {calculateDurationMs} from '../utils/timeUtils';
+import {calculateDurationMs} from '../../../client/src/core/utils/timeUtils';
 import {dealWithActions, dealWithFood, dealWithSleep, dealWithSport} from "./dealings";
 import {getProductivity} from "./getProductivity";
 import {
     IAction,
-    IActionPercentage,
-    IAdvice, IAnalyzeResult,
+    IActionPercentages,
+    IAdvice,
+    IAnalyzeResult,
     IProductivity,
     TAction,
     TNature
-} from "../../../../server/commonTypes/timeAnalyzerTypes";
+} from "../../../commonTypes/timeAnalyzerTypes";
 
 const actionTypes = ['sport', 'default', 'food', 'sleep']
 
@@ -38,7 +39,7 @@ function getActionsAndDate(actionsString: string): [IAction[], Date] {
         for (let stringAction of stringActions) {
             if (stringAction === '') continue
 
-            const previousAction = actions.length && actions.slice(-1)[0]
+            const previousAction: IAction | undefined = actions.slice(-1)[0]
 
             //Check if string is an action description
             if (!/^[\d\-]/.test(stringAction)) {
@@ -55,7 +56,7 @@ function getActionsAndDate(actionsString: string): [IAction[], Date] {
             let startTime = new Date(0, 0, 0, +actionRegExp!.groups!.startTimeHours, +actionRegExp!.groups!.startTimeMinutes)
 
             if (Number.isNaN(startTime.valueOf())) {
-                if (previousAction !== 0)
+                if (previousAction)
                     startTime = previousAction.endTime
                 else throw new Error(`Error! Start time of action "${name}" is not defined!`)
             }
@@ -127,7 +128,7 @@ function getActionsAndDate(actionsString: string): [IAction[], Date] {
     }
 }
 
-function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
+function calculateActionsPercentage(actions: IAction[]): IActionPercentages {
     const startDayTime = actions[0].startTime
     const endDayTime = actions.slice(-1)[0].endTime
 
@@ -144,29 +145,26 @@ function calculateActionsPercentage(actions: IAction[]): IActionPercentage[] {
     let neutralActionsPercentage = +(neutralActionsTime / wholeDayTime * 100).toFixed(2)
 
     // WARNING! Name changing will break the program!
-    return [
-        {
-            name: 'Positive actions',
+    return {
+        positive: {
             percentage: positiveActionsPercentage,
             actionsTime: positiveActionsTime,
             color: 'green.500'
         },
-        {
-            name: 'Neutral actions',
-            percentage: neutralActionsPercentage,
-            actionsTime: neutralActionsTime,
-            color: 'yellow.500'
-        },
-        {
-            name: 'Negative actions',
+        negative: {
             percentage: negativeActionsPercentage,
             actionsTime: negativeActionsTime,
             color: 'red.500'
+        },
+        neutral: {
+            percentage: neutralActionsPercentage,
+            actionsTime: neutralActionsTime,
+            color: 'yellow.500'
         }
-    ]
+    }
 }
 
-function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActionPercentage[]): [IProductivity, IAdvice[]] {
+function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActionPercentages): [IProductivity, IAdvice[]] {
     let productivityValue = 0
     const advices: IAdvice[] = [];
 

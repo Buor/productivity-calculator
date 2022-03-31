@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import {EnterActions} from './EnterActions';
-import {analyzeTime} from '../../../core/timeAnalyzer';
+import {analyzeTime} from '../../../../../src/core/timeAnalyzer';
 import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
 import {CalendarDal} from "../../../core/dal/calendarDal";
-import {IAnalyzeResult} from "../../../../../server/commonTypes/timeAnalyzerTypes";
+import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
 

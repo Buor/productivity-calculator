@@ -1,5 +1,5 @@
-import {convertMs} from "../utils/timeUtils";
-import {IAction, IActionPercentage, IAdvice} from "../../../../server/commonTypes/timeAnalyzerTypes";
+import {convertMs} from "../../../client/src/core/utils/timeUtils";
+import {IAction, IActionPercentages, IAdvice} from "../../../commonTypes/timeAnalyzerTypes";
 
 export function dealWithSport(actions: IAction[]): [number, IAdvice] {
     /* Sport productivity impact
@@ -44,7 +44,7 @@ export function dealWithSport(actions: IAction[]): [number, IAdvice] {
     return [productivityValueMagnifier, advice]
 }
 
-export function dealWithActions(actions: IAction[], actionsPercentages: IActionPercentage[]): [number, IAdvice] {
+export function dealWithActions(actions: IAction[], actionsPercentages: IActionPercentages): [number, IAdvice] {
     /* Positive actions impact
         6 minutes of any positive action = +1
         For every hour +5 in addition
@@ -58,8 +58,8 @@ export function dealWithActions(actions: IAction[], actionsPercentages: IActionP
     //Form advice
     let actionsAdvice: IAdvice = {text: '', mark: 'neutral'}
 
-    let positiveActionsPercentage = actionsPercentages.find(ap => ap.name === 'Positive actions')
-    let negativeActionsPercentage = actionsPercentages.find(ap => ap.name === 'Negative actions')
+    let positiveActionsPercentage = actionsPercentages.positive
+    let negativeActionsPercentage = actionsPercentages.negative
     if (positiveActionsPercentage === undefined || negativeActionsPercentage === undefined) throw new Error(`Error! Can't find positive or negative actions!`)
 
     let [positiveActionsDurationMs, negativeActionsDurationMs] = [positiveActionsPercentage.actionsTime, negativeActionsPercentage.actionsTime]

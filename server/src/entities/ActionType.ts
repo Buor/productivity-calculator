@@ -19,6 +19,8 @@ export class ActionType {
     @Column()
     defaultNature: string
 
+    @Column()
+    parent?: string
 
     @OneToMany(() => Action, action => action.actionType)
     actions: Action[]
