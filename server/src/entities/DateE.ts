@@ -1,7 +1,7 @@
 import {Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {DateResult} from "./DateResult";
 import {Action} from "./Action";
-import {JoinColumn} from "typeorm/browser";
+import {JoinColumn} from "typeorm";
 
 @Entity()
 export class DateE {

@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import {EnterActions} from './EnterActions';
-import {analyzeTime} from '../../../../../src/core/timeAnalyzer';
 import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
 import {CalendarDal} from "../../../core/dal/calendarDal";
 import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
@@ -24,15 +23,15 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
     // })
     const [enterActionsError, setEnterActionsError] = useState<Error | null>(null)
 
-    const analyze = () => {
+    const analyze = async () => {
         try {
-            const analyzeResult = analyzeTime(actionsText)
-            setAnalyzeResult(analyzeResult)
-            setEnterActionsError(null)
-            CalendarDal.sendDateInfo(analyzeResult)
-        } catch (e) {
-            console.error(e)
-            setEnterActionsError(e as Error)
+            // setAnalyzeResult(analyzeResult)
+            // setEnterActionsError(null)
+            const response = await CalendarDal.addDate(actionsText)
+            setAnalyzeResult(response.data)
+            console.log(response.data)
+        } catch (e: any) {
+            setEnterActionsError(e.response.data as Error)
         }
     }
 

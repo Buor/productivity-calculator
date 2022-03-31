@@ -13,7 +13,7 @@ export class CalendarController {
     // }
 
     @Post('/date')
-    async addDay(@Body() actionsText: string) {
-        return await this.calendarService.addDay(actionsText)
+    async addDay(@Body() body: {actionsString: string}) {
+        return await this.calendarService.addDay(body.actionsString)
     }
 }

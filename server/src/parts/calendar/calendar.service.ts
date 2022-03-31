@@ -1,4 +1,4 @@
-import {Injectable} from "@nestjs/common";
+import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {DateE} from "../../entities/DateE";
 import {Repository} from "typeorm";
@@ -6,17 +6,18 @@ import {DateResult} from "../../entities/DateResult";
 import {ActionType} from "../../entities/ActionType";
 import {Action} from "../../entities/Action";
 import {analyzeTime} from "../../core/timeAnalyzer";
+import {IAnalyzeResult} from "../../../commonTypes/timeAnalyzerTypes";
 
 @Injectable()
 export class CalendarService {
     constructor(@InjectRepository(DateE) private dateRepository: Repository<DateE>,
-                @InjectRepository(DateE) private dateResultRepository: Repository<DateResult>,
-                @InjectRepository(DateE) private actionRepository: Repository<Action>,
-                @InjectRepository(DateE) private actionTypeRepository: Repository<ActionType>
+                @InjectRepository(DateResult) private dateResultRepository: Repository<DateResult>,
+                @InjectRepository(Action) private actionRepository: Repository<Action>,
+                @InjectRepository(ActionType) private actionTypeRepository: Repository<ActionType>
     ) {
     }
 
-    async addDay(actionsText: string) {
+    async addDay(actionsText: string): Promise<IAnalyzeResult | never> {
 
         try {
             //Parse actionsText to IAnalyzeResult
@@ -54,10 +55,11 @@ export class CalendarService {
 
                 await this.actionRepository.save(dbAction)
             }
-            return true
+            return dayResult
         } catch(e) {
-            console.log(e.message)
-            return false
+            throw new HttpException({
+                message: e.message,
+            }, HttpStatus.BAD_REQUEST)
         }
     }
 }

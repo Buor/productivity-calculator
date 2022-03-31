@@ -52,7 +52,7 @@ export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions})
                           opacity={0}
                           animate={{opacity: 100}}
                           transition={{delay: .1, duration: 7}}
-                          onClick={() => handleCardClick(percentage[1].name)}
+                          onClick={() => handleCardClick(percentage[0])}
                     >
                         <Box color={'white'}
                              as={'h3'}
