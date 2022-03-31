@@ -3,6 +3,7 @@ import {EnterActions} from './EnterActions';
 import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
 import {CalendarDal} from "../../../core/dal/calendarDal";
 import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
+import {restoreActionsDates} from "../../../core/utils/timeUtils";
 
 interface IProps {
 
@@ -25,11 +26,11 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
 
     const analyze = async () => {
         try {
-            // setAnalyzeResult(analyzeResult)
-            // setEnterActionsError(null)
             const response = await CalendarDal.addDate(actionsText)
-            setAnalyzeResult(response.data)
-            console.log(response.data)
+            const analyzeResult = response.data
+            analyzeResult.actions = restoreActionsDates(analyzeResult.actions)
+
+            setAnalyzeResult(analyzeResult)
         } catch (e: any) {
             setEnterActionsError(e.response.data as Error)
         }

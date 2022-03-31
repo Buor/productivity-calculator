@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import {Box, Td, Tr} from "@chakra-ui/react";
 import {IAction} from "../../../../../../commonTypes/timeAnalyzerTypes";
+import {getActionTimeInterval} from "../../../../core/utils/timeUtils";
 
 interface IProps {
     action: IAction
@@ -15,7 +16,7 @@ export const ModalAction: React.FC<IProps> = ({action}) => {
                _hover={{backgroundColor: 'custom.dark'}}
                onClick={() => setDescriptionOpened(!descriptionOpened)}
     >
-        <Td minWidth={131}>{action.startTime.getHours() + ':' + ('0' + action.startTime.getMinutes()).slice(-2) + '-' + action.endTime.getHours() + ':' + ('0' + action.endTime.getMinutes()).slice(-2)}</Td>
+        <Td minWidth={131}>{getActionTimeInterval(action)}</Td>
         <Td>{action.name}
             {
                 descriptionOpened
