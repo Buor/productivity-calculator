@@ -4,7 +4,7 @@ import {CalendarModule} from "../../parts/calendar/calendar.module";
 const configModules = [TypeOrmModule.forRoot({
     type: 'sqlite',
     database: './saves/saveFile.db',
-    entities: ["dist/entities/**/*.js"],
+    entities: ["dist/src/entities/**/*.js"],
     synchronize: true, //todo remove on production
 })]
 
