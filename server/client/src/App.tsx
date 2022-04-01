@@ -8,16 +8,22 @@ import { Manual } from './components/individual/Manual/Manual'
 function App() {
     return (
         <Box h={'100vh'} backgroundColor={'custom.dark'} color={'white'}>
-            <Navbar />
-            <Routes>
-                {routes.map((route) => (
-                    <Route
-                        key={route.link}
-                        path={route.link}
-                        element={route.component}
-                    />
-                ))}
-            </Routes>
+            <Box
+                d={'flex'}
+            >
+                <Navbar />
+                <Box flex={'1 1 100%'}>
+                    <Routes>
+                        {routes.map((route) => (
+                            <Route
+                                key={route.link}
+                                path={route.link}
+                                element={route.component}
+                            />
+                        ))}
+                    </Routes>
+                </Box>
+            </Box>
             <Manual />
         </Box>
     )

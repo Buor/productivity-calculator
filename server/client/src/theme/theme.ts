@@ -1,5 +1,6 @@
 import {extendTheme} from '@chakra-ui/react'
-import {Card} from '../components/ui/customComponents'
+import {Card, Button} from '../components/ui/customComponents'
+
 export const customTheme = extendTheme({
     colors: {
         custom: {
@@ -18,6 +19,7 @@ export const customTheme = extendTheme({
         }
     },
     components: {
-        Card
+        Card,
+        Button
     }
 })
