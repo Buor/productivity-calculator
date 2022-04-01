@@ -34,8 +34,11 @@ export const Button: ComponentStyleConfig = {
         '&:hover': {
             backgroundColor: 'custom.medium'
         },
-        _focus: {
-            border: '0'
+        '&:focus': {
+            boxShadow: 'none'
+        },
+        '&:active': {
+            background: 'none !important'
         }
     },
     variants: {
