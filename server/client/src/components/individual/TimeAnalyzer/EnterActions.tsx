@@ -18,9 +18,29 @@ export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, han
                 <NumeratedTextarea textareaValue={actionsText} setTextareaValue={setActionsText}
                                    placeholder={'Enter your actions here'}/>
             </Box>
-            {error && <Box mt={4} textAlign={'center'} color={'white'} bg={'red.800'} p={2} w={'fit-content'} alignSelf={'center'} borderRadius={4}>{error.message}</Box>}
-            <Button mt={4} alignSelf={'center'} colorScheme={'yellow'}
-                    onClick={() => handleAnalyzeButtonClick()}>Analyze</Button>
+            {error &&
+                <Box
+                    w={'fit-content'}
+                    mt={4}
+                    p={2}
+                    alignSelf={'center'}
+                    textAlign={'center'}
+                    color={'white'}
+                    bg={'red.800'}
+                    borderRadius={4}
+                >
+                    {error.message}
+                </Box>
+            }
+            <Button
+                mt={4}
+                alignSelf={'center'}
+                variant={'yellow'}
+
+                onClick={() => handleAnalyzeButtonClick()}
+            >
+                Analyze
+            </Button>
         </Box>
     )
 }
