@@ -12,7 +12,8 @@ interface IProps {
 
 export const TimeAnalyzer: React.FC<IProps> = () => {
     const [actionsText, setActionsText] = useState(``)
-    const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>(null)
+
+    const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null | string>(null)
     // todo delete (mock data for test purposes)
     // const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>({
     //     productivity: 5,
