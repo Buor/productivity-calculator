@@ -25,11 +25,15 @@ function getActionsAndDate(actionsString: string): [IAction[], Date] {
     return [actions, date]
 
     function getDate(stringActions: string[]): Date {
-        const date = stringActions.shift()
+        let date: string
+
+        do date = stringActions.shift()
+        while (/^[\n ]*$/.test(date))
+
         const dateData = date!.match(/(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.([2-9]\d{3})/)
 
         validateDate(dateData as Array<string | undefined>)
-        console.log(dateData)
+
         return new Date(+dateData![3], +dateData![2], +dateData![1])
     }
 
