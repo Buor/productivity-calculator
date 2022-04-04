@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {Box, Button, Checkbox} from '@chakra-ui/react';
 import {NumeratedTextarea} from '../../ui/NumeratedTextarea';
 import {Title} from '../../ui/Title';
@@ -7,12 +7,12 @@ interface IProps {
     actionsText: string
     setActionsText: Function,
     handleAnalyzeButtonClick: Function,
-    error: Error | null
+    error: Error | null,
+    isManyDays: boolean,
+    setIsManyDays: any
 }
 
-export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, handleAnalyzeButtonClick, error}) => {
-    const [isManyDays, setIsManyDays] = useState(false)
-
+export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, handleAnalyzeButtonClick, error, isManyDays, setIsManyDays}) => {
     return (
         <Box d={'flex'} flexDirection={'column'} alignItems={'center'}>
             <Title>Enter your actions!</Title>
@@ -36,9 +36,9 @@ export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, han
             }
             <Checkbox
                 mt={4}
-                checked={isManyDays}
+                defaultChecked={isManyDays}
                 colorScheme={'yellow'}
-                onChange={() => setIsManyDays(prev => !prev)}
+                onChange={() => setIsManyDays((prev: boolean) => !prev)}
             >
                 Add a few days
             </Checkbox>
