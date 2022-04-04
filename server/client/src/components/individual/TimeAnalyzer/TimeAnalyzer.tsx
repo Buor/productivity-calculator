@@ -4,6 +4,7 @@ import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
 import {CalendarDal} from "../../../core/dal/calendarDal";
 import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
 import {restoreActionsDates} from "../../../core/utils/timeUtils";
+import {SuccessAnalysis} from "./SuccessAnalysis";
 
 interface IProps {
 
@@ -11,7 +12,8 @@ interface IProps {
 
 export const TimeAnalyzer: React.FC<IProps> = () => {
     const [actionsText, setActionsText] = useState(``)
-    const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>(null)
+
+    const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null | string>(null)
     // todo delete (mock data for test purposes)
     // const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>({
     //     productivity: 5,
@@ -23,13 +25,24 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
     //     actions: []
     // })
     const [enterActionsError, setEnterActionsError] = useState<Error | null>(null)
+    const [isManyDays, setIsManyDays] = useState(false)
+
+    const reset = () => setAnalyzeResult(null)
 
     const analyze = async () => {
+        let analyzeResult: IAnalyzeResult | null | string
         try {
-            const response = await CalendarDal.addDate(actionsText)
-            const analyzeResult = response.data
-            analyzeResult.actions = restoreActionsDates(analyzeResult.actions)
-
+            if (!isManyDays) {
+                const response = await CalendarDal.addDate(actionsText)
+                analyzeResult = response.data as IAnalyzeResult
+                analyzeResult.actions = restoreActionsDates(analyzeResult.actions)
+            } else {
+                const response = await CalendarDal.addDates(actionsText)
+                if (response.data === true)
+                    analyzeResult = `Actions has been successfully parsed!`
+                else
+                    analyzeResult = `Unexpected error occurred!`
+            }
             setAnalyzeResult(analyzeResult)
         } catch (e: any) {
             setEnterActionsError(e.response.data as Error)
@@ -43,8 +56,12 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
                     ? <EnterActions actionsText={actionsText}
                                     setActionsText={setActionsText}
                                     handleAnalyzeButtonClick={analyze}
-                                    error={enterActionsError}/>
-                    : <AnalyzeResult analyzeResult={analyzeResult}/>
+                                    error={enterActionsError}
+                                    isManyDays={isManyDays}
+                                    setIsManyDays={setIsManyDays}/>
+                    : typeof (analyzeResult) === 'string'
+                        ? <SuccessAnalysis analyzeResult={analyzeResult} reset={reset}/>
+                        : <AnalyzeResult analyzeResult={analyzeResult}/>
             }
         </>
     )
