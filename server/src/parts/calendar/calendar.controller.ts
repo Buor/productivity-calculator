@@ -13,12 +13,12 @@ export class CalendarController {
     // }
 
     @Post('/date')
-    async addDay(@Body() body: {actionsString: string}) {
+    async addDay(@Body() body: {actionsString: string}): Promise<IDateResult> {
         return await this.calendarService.addDay(body.actionsString)
     }
 
     @Post('/dates')
-    async addDays(@Body() body: {actionsString: string}) {
+    async addDays(@Body() body: {actionsString: string}): Promise<boolean> {
         return await this.calendarService.addDays(body.actionsString)
     }
 }

@@ -19,11 +19,11 @@ export class Action {
     @Column()
     duration: number
 
-    @Column('date')
-    startTime: Date
+    @Column()
+    startTime: string
 
-    @Column('date')
-    endTime: Date
+    @Column()
+    endTime: string
 
     @ManyToOne(() => ActionType, actionType => actionType.actions)
     actionType: ActionType

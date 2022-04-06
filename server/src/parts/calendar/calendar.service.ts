@@ -6,7 +6,18 @@ import {DateResult} from "../../entities/DateResult";
 import {ActionType} from "../../entities/ActionType";
 import {Action} from "../../entities/Action";
 import {analyzeTime} from "../../core/timeAnalyzer";
-import {IAnalyzeResult} from "../../../commonTypes/timeAnalyzerTypes";
+import {
+    IAction,
+    IActionPercentages,
+    IAnalyzeResult,
+    IDateResult,
+    TAction,
+    TNature
+} from "../../../commonTypes/timeAnalyzerTypes";
+import {formatDate, getDateHM, hmToDate} from "../../utils/timeHelpers/timeHelpers";
+import {getProductivity} from "../../core/timeAnalyzer/getProductivity";
+import {Advices} from "../../utils/advices/advices";
+import {analyzeResultToDateResult} from "../../core/timeAnalyzer/timeAnalyzerUtils";
 
 @Injectable()
 export class CalendarService {
@@ -17,10 +28,11 @@ export class CalendarService {
     ) {
     }
 
-    async addDay(actionsText: string): Promise<IAnalyzeResult | never> {
+    async addDay(actionsText: string): Promise<IDateResult | never> {
         try {
-            const dayResult = analyzeTime(actionsText)
-            return this.addDayToDb(dayResult)
+            const dateResult = analyzeTime(actionsText)
+            await this.addDayToDb(dateResult)
+            return analyzeResultToDateResult(dateResult)
         } catch (e) {
             throw new HttpException({
                 message: e.message,
@@ -58,6 +70,7 @@ export class CalendarService {
         dateResult.neutralActionsTime = dayResult.actionsPercentages.neutral.actionsTime
         dateResult.negativeActionsTime = dayResult.actionsPercentages.negative.actionsTime
         dateResult.productivity = dayResult.productivity.value
+        dateResult.advicesLinks = dayResult.advicesLinks.join(',')
 
         await this.dateResultRepository.save(dateResult)
 
@@ -72,8 +85,8 @@ export class CalendarService {
         for (let action of dayResult.actions) {
             let dbAction = this.actionRepository.create()
             dbAction.date = date
-            dbAction.startTime = action.startTime
-            dbAction.endTime = action.endTime
+            dbAction.startTime = getDateHM(action.startTime)
+            dbAction.endTime = getDateHM(action.endTime)
             dbAction.name = action.name
             dbAction.duration = action.durationMs
             dbAction.description = action.description
@@ -81,6 +94,5 @@ export class CalendarService {
 
             await this.actionRepository.save(dbAction)
         }
-        return dayResult
     }
 }

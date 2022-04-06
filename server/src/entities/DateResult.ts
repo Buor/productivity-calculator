@@ -23,6 +23,9 @@ export class DateResult {
     @Column()
     productivity: number
 
+    @Column()
+    advicesLinks: string
+
     @OneToOne(() => DateE, dateE => dateE.dateResult)
     dateE: DateE
 }
