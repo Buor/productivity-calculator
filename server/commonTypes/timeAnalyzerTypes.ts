@@ -1,5 +1,6 @@
 export type TNature = 'positive' | 'neutral' | 'negative'
 export type TAction = 'sport' | 'default' | 'food' | 'sleep'
+
 export interface IAction {
     name: string
     startTime: Date
@@ -24,7 +25,7 @@ export interface IActionPercentage {
 
 export interface IAdvice {
     text: string
-    mark: 'positive' | 'neutral' | 'negative'
+    mark: TNature
 }
 
 export interface IProductivity {
@@ -32,10 +33,18 @@ export interface IProductivity {
     comment: string,
     color: string
 }
-export interface IAnalyzeResult {
+
+interface IDateData {
     actionsPercentages: IActionPercentages
     productivity: IProductivity,
     actions: IAction[],
-    advices: IAdvice[],
     date: Date
+}
+
+export interface IAnalyzeResult extends IDateData {
+    advicesLinks: string[]
+}
+
+export interface IDateResult extends IDateData {
+    advices: IAdvice[]
 }
