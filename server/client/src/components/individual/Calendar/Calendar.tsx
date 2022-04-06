@@ -1,9 +1,9 @@
 import {Box} from "@chakra-ui/react";
 import {CalendarHead} from "./CalendarHead";
 import {useState} from "react";
-import {monthNames} from "../../../../core/utils/timeUtils";
+import {monthNames} from "../../../core/utils/timeUtils";
 import {CalendarDays} from "./CalendarDays";
-import {IAnalyzeResult} from "../../../../../../commonTypes/timeAnalyzerTypes";
+import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     datesData: IAnalyzeResult[]

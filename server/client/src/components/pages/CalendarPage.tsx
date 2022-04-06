@@ -1,7 +1,7 @@
 import {Box, Text} from "@chakra-ui/react";
-import {Calendar} from "../individual/CalendarPage/Calendar/Calendar";
+import {Calendar} from "../individual/Calendar/Calendar";
 import {useEffect, useState} from "react";
-import {YearCalendar} from "../individual/CalendarPage/Calendar/YearCalendar";
+import {YearCalendar} from "../individual/Calendar/YearCalendar";
 import {IAnalyzeResult} from "../../../../commonTypes/timeAnalyzerTypes";
 
 
