@@ -34,7 +34,7 @@ function getActionsAndDate(actionsString: string): [IAction[], Date] {
 
         validateDate(dateData as Array<string | undefined>)
 
-        return new Date(+dateData![3], +dateData![2], +dateData![1])
+        return new Date(+dateData![3], +dateData![2] - 1, +dateData![1])
     }
 
     function getActionsFromStrings(stringActions: string[]): IAction[] {
