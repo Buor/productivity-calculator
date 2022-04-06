@@ -4,7 +4,6 @@ import {getProductivity} from "./getProductivity";
 import {
     IAction,
     IActionPercentages,
-    IAdvice,
     IAnalyzeResult,
     IProductivity,
     TAction,
@@ -168,33 +167,33 @@ function calculateActionsPercentage(actions: IAction[]): IActionPercentages {
     }
 }
 
-function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActionPercentages): [IProductivity, IAdvice[]] {
+function getProductivityAndAdvices(actions: IAction[], actionsPercentages: IActionPercentages): [IProductivity, string[]] {
     let productivityValue = 0
-    const advices: IAdvice[] = [];
+    const advicesLinks: string[] = [];
 
     //Form advices and increase productivityValue
     [dealWithSport(actions), dealWithActions(actions, actionsPercentages), dealWithSleep(actions), dealWithFood(actions)]
         .forEach(entry => {
             productivityValue += entry[0]
-            advices.push(entry[1])
+            advicesLinks.push(entry[1])
         })
 
     const productivity = getProductivity(productivityValue)
 
-    return [productivity, advices]
+    return [productivity, advicesLinks]
 }
 
 export function analyzeTime(actionsString: string): IAnalyzeResult {
 
     const [actions, date] = getActionsAndDate(actionsString)
     const actionsPercentages = calculateActionsPercentage(actions)
-    const [productivity, advices] = getProductivityAndAdvices(actions, actionsPercentages)
+    const [productivity, advicesLinks] = getProductivityAndAdvices(actions, actionsPercentages)
 
     return {
         actions,
         actionsPercentages,
         productivity,
-        advices,
+        advicesLinks,
         date
     }
 }

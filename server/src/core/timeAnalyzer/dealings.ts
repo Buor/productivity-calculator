@@ -1,7 +1,7 @@
 import {convertMs} from "../../../client/src/core/utils/timeUtils";
-import {IAction, IActionPercentages, IAdvice} from "../../../commonTypes/timeAnalyzerTypes";
+import {IAction, IActionPercentages} from "../../../commonTypes/timeAnalyzerTypes";
 
-export function dealWithSport(actions: IAction[]): [number, IAdvice] {
+export function dealWithSport(actions: IAction[]): [number, string] {
     /* Sport productivity impact
         1 hour per day = +15
         +3 for every additional 15 minutes
@@ -11,40 +11,26 @@ export function dealWithSport(actions: IAction[]): [number, IAdvice] {
     const sportDurationM = actions.reduce((acc, action) => action.type === 'sport' ? acc + +convertMs(action.durationMs, 'm') : acc, 0)
     if (sportDurationM >= 60) productivityValueMagnifier += 15 + Math.round((sportDurationM - 60) / 15) * 3
 
-    let advice: IAdvice
+    let advice: string
 
     //Form advice
     if (sportDurationM >= 180)
-        advice = {
-            mark: 'positive',
-            text: `You have no equal! Wonderful work on the body and on yourself! Just don't overdo it with strength exercises, and you should also have a good rest.`
-        }
+        advice = 'sport5'
     else if (sportDurationM >= 120)
-        advice = {
-            mark: 'positive',
-            text: 'Great job! Your body will thank you, the risk of many diseases is reduced. But don\'t overdo it!'
-        }
+        advice = 'sport4'
     else if (sportDurationM >= 60)
-        advice = {
-            text: 'A healthy body has a healthy mind. Good job.',
-            mark: 'positive'
-        }
+        advice = 'sport3'
     else if (sportDurationM >= 30)
-        advice = {
-            text: 'Not a bad job on the body, but you can clearly do better!',
-            mark: 'neutral'
-        }
+        advice = 'sport2'
     else if (sportDurationM >= 0)
-        advice = {
-            text: 'Don\'t ignore health and sport! This is one of the most important things in life, and it needs to be monitored so that every next day is better for you!',
-            mark: 'negative'
-        }
+        advice = 'sport1'
+
     else throw new Error(`Can't generate sport Advice!`)
 
     return [productivityValueMagnifier, advice]
 }
 
-export function dealWithActions(actions: IAction[], actionsPercentages: IActionPercentages): [number, IAdvice] {
+export function dealWithActions(actions: IAction[], actionsPercentages: IActionPercentages): [number, string] {
     /* Positive actions impact
         6 minutes of any positive action = +1
         For every hour +5 in addition
@@ -55,8 +41,8 @@ export function dealWithActions(actions: IAction[], actionsPercentages: IActionP
     productivityValueMagnifier += Math.floor(positiveActionsDurationM / 6) + Math.floor(positiveActionsDurationM / 60) * 5
 
 
-    //Form advice
-    let actionsAdvice: IAdvice = {text: '', mark: 'neutral'}
+    //Make link to advice
+    let actionsAdvice: string
 
     let positiveActionsPercentage = actionsPercentages.positive
     let negativeActionsPercentage = actionsPercentages.negative
@@ -64,26 +50,21 @@ export function dealWithActions(actions: IAction[], actionsPercentages: IActionP
 
     let [positiveActionsDurationMs, negativeActionsDurationMs] = [positiveActionsPercentage.actionsTime, negativeActionsPercentage.actionsTime]
 
-    if (positiveActionsDurationMs / negativeActionsDurationMs >= 4) {
-        actionsAdvice.text = 'Positive actions exceed negative ones by 4 times or even more. You did a great job! Keep it up!'
-        actionsAdvice.mark = 'positive'
-    } else if (positiveActionsDurationMs / negativeActionsDurationMs >= 2) {
-        actionsAdvice.text = 'Positive actions exceed negative ones by 2 times. You did a good job!'
-        actionsAdvice.mark = 'positive'
-    } else if (negativeActionsDurationMs / positiveActionsDurationMs > 4) {
-        actionsAdvice.text = 'Negative actions exceed positive ones by 4 times. Don\'t let your hands go down! Remember that your actions today determine how all your future days will pass. Don\'t lose heart and go ahead!'
-        actionsAdvice.mark = 'negative'
-    } else if (negativeActionsDurationMs / positiveActionsDurationMs > 2) {
-        actionsAdvice.text = 'Negative actions exceed positive ones by 2 times. Do not lose faith in yourself and do not forget what you are trying for!'
-        actionsAdvice.mark = 'negative'
-    } else {
-        actionsAdvice.text = 'Positive actions are approximately equal to negative ones in duration. You can do better!'
-        actionsAdvice.mark = 'neutral'
-    }
+    if (positiveActionsDurationMs / negativeActionsDurationMs >= 4)
+        actionsAdvice = 'actions5'
+    else if (positiveActionsDurationMs / negativeActionsDurationMs >= 2)
+        actionsAdvice = 'actions4'
+    else if (negativeActionsDurationMs / positiveActionsDurationMs > 4)
+        actionsAdvice = 'actions1'
+    else if (negativeActionsDurationMs / positiveActionsDurationMs > 2)
+        actionsAdvice = 'actions2'
+    else
+        actionsAdvice = 'actions3'
+
     return [productivityValueMagnifier, actionsAdvice]
 }
 
-export function dealWithSleep(actions: IAction[]): [number, IAdvice] {
+export function dealWithSleep(actions: IAction[]): [number, string] {
     /* Bedtime impact
         < 22:00 = +20
         22:00 - 23:00 = +15
@@ -97,29 +78,24 @@ export function dealWithSleep(actions: IAction[]): [number, IAdvice] {
     else if (bedtimeHour === 23) productivityValueMagnifier += 15
     else if (bedtimeHour === 0) productivityValueMagnifier += 10
 
-    let advice: IAdvice
+    let advice: string
     //Form advice
     if (bedtimeHour <= 23)
-        advice = {
-            text: `You went to bed on time! Good job!`,
-            mark: 'positive'
-        }
+        advice = 'sleep1'
     else
-        advice = {
-            text: `Napping is essential for healthy life. Try to go to sleep before 23:00 or even earlier!`,
-            mark: `neutral`
-        }
+        advice = 'sleep2'
+
     return [productivityValueMagnifier, advice]
 }
 
-export function dealWithFood(actions: IAction[]): [number, IAdvice] {
+export function dealWithFood(actions: IAction[]): [number, string] {
     let productivityValueMagnifier = 0
 
     let junkFoodRegExp = /#(вреднаяЕда|junkFood)=([1-9]\d*)/
 
     actions.forEach(action => {
         const matched = action.description.match(junkFoodRegExp)
-        if(matched !== null) {
+        if (matched !== null) {
             const junkFoodCount = +matched[2]
             productivityValueMagnifier += junkFoodCount * -5
 
@@ -127,24 +103,15 @@ export function dealWithFood(actions: IAction[]): [number, IAdvice] {
         }
     })
 
-    let advice: IAdvice
+    let advice: string
 
-    if(productivityValueMagnifier === 0) {
-        advice = {
-            text: `Great job! You haven't eat anything bad today!`,
-            mark: `positive`
-        }
-    } else if(productivityValueMagnifier <= 15) {
-        advice = {
-            text: `You've eaten some bad food today. Try to not do this again!`,
-            mark: 'neutral'
-        }
-    } else {
-        advice = {
-            text: `You've eaten a lot of bad food today! Try to not do this again!`,
-            mark: 'negative'
-        }
-    }
+    if (productivityValueMagnifier === 0)
+        advice = 'food3'
+    else if (productivityValueMagnifier <= 15)
+        advice = 'food2'
+    else
+        advice = 'food1'
+
 
     return [productivityValueMagnifier, advice]
 }
