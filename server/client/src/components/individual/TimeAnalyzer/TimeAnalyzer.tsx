@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {EnterActions} from './EnterActions';
 import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
 import {CalendarDal} from "../../../core/dal/calendarDal";
-import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
+import {IDateResult} from "../../../../../commonTypes/timeAnalyzerTypes";
 import {restoreActionsDates} from "../../../core/utils/timeUtils";
 import {SuccessAnalysis} from "./SuccessAnalysis";
 
@@ -13,7 +13,7 @@ interface IProps {
 export const TimeAnalyzer: React.FC<IProps> = () => {
     const [actionsText, setActionsText] = useState(``)
 
-    const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null | string>(null)
+    const [analyzeResult, setAnalyzeResult] = useState<IDateResult | null | string>(null)
     // todo delete (mock data for test purposes)
     // const [analyzeResult, setAnalyzeResult] = useState<IAnalyzeResult | null>({
     //     productivity: 5,
@@ -30,11 +30,11 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
     const reset = () => setAnalyzeResult(null)
 
     const analyze = async () => {
-        let analyzeResult: IAnalyzeResult | null | string
+        let analyzeResult: IDateResult | null | string
         try {
             if (!isManyDays) {
                 const response = await CalendarDal.addDate(actionsText)
-                analyzeResult = response.data as IAnalyzeResult
+                analyzeResult = response.data as IDateResult
                 analyzeResult.actions = restoreActionsDates(analyzeResult.actions)
             } else {
                 const response = await CalendarDal.addDates(actionsText)

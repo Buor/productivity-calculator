@@ -3,10 +3,10 @@ import {Box} from '@chakra-ui/react';
 import {EfficiencyBlock} from './EfficiencyBlock';
 import {AdvicesBlock} from './AdvicesBlock';
 import {ProductivityBlock} from './ProductivityBlock';
-import {IAnalyzeResult} from "../../../../../../commonTypes/timeAnalyzerTypes";
+import {IDateResult} from "../../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
-    analyzeResult: IAnalyzeResult
+    analyzeResult: IDateResult
 }
 
 export const AnalyzeResult: React.FC<IProps> = ({analyzeResult}) => {
