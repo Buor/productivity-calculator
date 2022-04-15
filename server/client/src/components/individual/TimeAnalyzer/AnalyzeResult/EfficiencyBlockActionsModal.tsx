@@ -110,7 +110,7 @@ export const EfficiencyBlockActionsModal: React.FC<IProps> = ({actions, close, a
                                                                                   key={action.endTime.valueOf()}/>)}
                                     </Tbody>
                                 </Table>
-                            : `There are no ${actionsType}!` + (actionsType === 'Negative actions' ? ' Great job!' : '')
+                            : `There are no ${actionsType}!` + (actionsType === 'negative' ? ' Great job!' : '')
                     }
 
                 </ModalBody>

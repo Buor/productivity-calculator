@@ -14,12 +14,12 @@ interface IProps {
 export const EfficiencyBlock: React.FC<IProps> = ({actionsPercentages, actions}) => {
 
     const [modalActionsType, setModalActionsType] = useState<null | string>(null)
-
+    console.log(modalActionsType)
     const actionsPart = useMemo(() => {
         switch (modalActionsType) {
-            case 'Positive actions':
+            case 'positive':
                 return actions.filter(action => action.nature === 'positive')
-            case 'Negative actions':
+            case 'negative':
                 return actions.filter(action => action.nature === 'negative')
             default:
                 return actions.filter(action => action.nature === 'neutral')
