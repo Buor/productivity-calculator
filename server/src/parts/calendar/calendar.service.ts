@@ -49,7 +49,7 @@ export class CalendarService {
 
         try {
             const daysActions = actionsSplitByDates.map(dayActions => analyzeTime(dayActions))
-            for(let dayActions of daysActions)
+            for (let dayActions of daysActions)
                 await this.addDayToDb(dayActions)
 
             return true
@@ -58,6 +58,72 @@ export class CalendarService {
                 message: e.message,
             }, HttpStatus.BAD_REQUEST)
         }
+    }
+
+    // async getMonth() {
+    //
+    // }
+
+    async getDate(dateStr: string): Promise<IDateResult> {
+        const date = new Date(dateStr)
+        return this.getDateResultFromDb(date)
+    }
+
+    private async getDateResultFromDb(date: Date): Promise<IDateResult | null> {
+        const result = null
+        const dateDb = await this.dateRepository.findOne({
+            where: {date: formatDate(date, 'dash')},
+            relations: ['dateResult']
+        })
+        if (!dateDb) return result
+
+        const dateResultDb = dateDb.dateResult
+
+        const actionsDb = await this.actionRepository.find({where: {date: dateDb}})
+        const actions: IAction[] = turnDbActions(actionsDb)
+
+        const actionsPercentages = getActionsPercentages(dateResultDb)
+
+        return {
+            actions,
+            date,
+            actionsPercentages,
+            productivity: getProductivity(dateResultDb.productivity),
+            advices: dateResultDb.advicesLinks.split(',').map(adviceLink => Advices[adviceLink])
+        }
+
+        function turnDbActions(actionsDb: Action[]): IAction[] {
+            return actionsDb.map(actionDb => ({
+                name: actionDb.name,
+                startTime: hmToDate(actionDb.startTime),
+                endTime: hmToDate(actionDb.endTime),
+                nature: actionDb.nature as TNature,
+                description: actionDb.description,
+                durationMs: actionDb.duration,
+                type: '' as TAction
+            }))
+        }
+
+        function getActionsPercentages(dateResultDb: DateResult): IActionPercentages {
+            return {
+                positive: {
+                    percentage: dateResultDb.positiveActionsPercentage,
+                    actionsTime: dateResultDb.positiveActionsTime,
+                    color: 'green.500'
+                },
+                neutral: {
+                    percentage: dateResultDb.neutralActionsPercentage,
+                    actionsTime: dateResultDb.neutralActionsTime,
+                    color: 'yellow.500'
+                },
+                negative: {
+                    percentage: dateResultDb.negativeActionsPercentage,
+                    actionsTime: dateResultDb.negativeActionsTime,
+                    color: 'red.500'
+                },
+            }
+        }
+
     }
 
     private async addDayToDb(dayResult: IAnalyzeResult) {

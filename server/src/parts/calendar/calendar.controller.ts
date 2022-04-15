@@ -1,5 +1,6 @@
-import {Body, Controller, Post} from "@nestjs/common";
+import {Body, Controller, Get, Param, Post} from "@nestjs/common";
 import {CalendarService} from "./calendar.service";
+import {IDateResult} from "../../../commonTypes/timeAnalyzerTypes";
 
 @Controller('/calendar')
 export class CalendarController {
@@ -7,10 +8,15 @@ export class CalendarController {
     constructor(private readonly calendarService: CalendarService) {
     }
 
-    // @Get('/monthDates/:monthTimeStamp')
+    // @Get('/month/:monthTimeStamp')
     // getMonthDays(@Param('monthTimeStamp') monthTimeStamp: number) {
-    //     return this.calendarService.getMonthDays(monthTimeStamp)
+    //     return this.calendarService.getMonth(monthTimeStamp)
     // }
+
+    @Get('/date/:dateStr')
+    async getDate(@Param('dateStr') dateStr: string) {
+        return await this.calendarService.getDate(dateStr)
+    }
 
     @Post('/date')
     async addDay(@Body() body: {actionsString: string}): Promise<IDateResult> {
