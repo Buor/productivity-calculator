@@ -18,6 +18,11 @@ export class CalendarController {
         return await this.calendarService.getDate(dateStr)
     }
 
+    @Get('/monthDates/:monthISOString')
+    async getMonthDates(@Param('monthISOString') monthISOString: string) {
+        return await this.calendarService.getMonth(monthISOString)
+    }
+
     @Post('/date')
     async addDay(@Body() body: {actionsString: string}): Promise<IDateResult> {
         return await this.calendarService.addDay(body.actionsString)

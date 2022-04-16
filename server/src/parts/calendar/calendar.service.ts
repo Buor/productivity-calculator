@@ -14,10 +14,11 @@ import {
     TAction,
     TNature
 } from "../../../commonTypes/timeAnalyzerTypes";
-import {formatDate, getDateHM, hmToDate} from "../../utils/timeHelpers/timeHelpers";
+import {formatDate, generateDatesForFetch, getDateHM, hmToDate} from "../../utils/timeHelpers/timeHelpers";
 import {getProductivity} from "../../core/timeAnalyzer/getProductivity";
 import {Advices} from "../../utils/advices/advices";
 import {analyzeResultToDateResult} from "../../core/timeAnalyzer/timeAnalyzerUtils";
+import {IDateData, IMonthDTO} from "../../../commonTypes/dtos";
 
 @Injectable()
 export class CalendarService {
@@ -69,13 +70,31 @@ export class CalendarService {
         return this.getDateResultFromDb(date)
     }
 
+    async getMonth(monthISOString: string): Promise<IMonthDTO> {
+        const month = new Date(monthISOString)
+        const datesForFetch = generateDatesForFetch(month)
+        const datesData: IDateData[] = []
+
+        for (let dateForFetch of datesForFetch) {
+            const fetchedDateResult = await this.getDateResultFromDb(dateForFetch)
+            datesData.push({
+                dateResult: fetchedDateResult,
+                dateISO: dateForFetch.toISOString()
+            })
+        }
+
+        return {
+            datesData
+        }
+    }
+
     private async getDateResultFromDb(date: Date): Promise<IDateResult | null> {
-        const result = null
         const dateDb = await this.dateRepository.findOne({
             where: {date: formatDate(date, 'dash')},
             relations: ['dateResult']
         })
-        if (!dateDb) return result
+
+        if (!dateDb) return null
 
         const dateResultDb = dateDb.dateResult
 
