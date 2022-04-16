@@ -8,4 +8,8 @@ export class CalendarDal {
     static async addDates(actionsString: string) {
         return axiosInstance.post('/calendar/dates', {actionsString})
     }
+
+    static async getMonth(month: Date) {
+        return axiosInstance.get(`/calendar/monthDates/${month.toISOString()}` )
+    }
 }

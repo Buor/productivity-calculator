@@ -1,19 +1,17 @@
 import {Box} from "@chakra-ui/react";
 import {CalendarHead} from "./CalendarHead";
-import {useState} from "react";
 import {monthNames} from "../../../core/utils/timeUtils";
 import {CalendarDays} from "./CalendarDays";
-import {IAnalyzeResult} from "../../../../../commonTypes/timeAnalyzerTypes";
+import {IMonthDTO} from "../../../../../commonTypes/dtos";
+import {useCalendarContext} from "../../pages/CalendarPage";
 
 interface IProps {
-    datesData: IAnalyzeResult[]
-    selectedMonth: Date
-    setSelectedMonth: Function
+    monthData: IMonthDTO
 }
 
-export const Calendar: React.FC<IProps> = ({datesData, selectedMonth, setSelectedMonth}) => {
+export const Calendar: React.FC<IProps> = ({monthData}) => {
 
-    const [dates, setDates] = useState<IAnalyzeResult[]>([])
+    const {setSelectedMonth, selectedMonth} = useCalendarContext()
 
     return <Box d={'flex'} flexDirection={'column'} alignItems={'center'}>
         <CalendarHead leftButtonHandler={() => setSelectedMonth((prev: Date) => new Date(prev.getFullYear(), prev.getMonth() - 1))}
@@ -21,6 +19,6 @@ export const Calendar: React.FC<IProps> = ({datesData, selectedMonth, setSelecte
                       month={monthNames[selectedMonth.getMonth()]}
                       year={selectedMonth.getFullYear()}
         />
-        <CalendarDays month={selectedMonth}/>
+        <CalendarDays datesData={monthData.datesData}/>
     </Box>
 }
