@@ -2,22 +2,26 @@ import React from 'react'
 import {Box, Button, Checkbox} from '@chakra-ui/react';
 import {NumeratedTextarea} from '../../ui/NumeratedTextarea';
 import {Title} from '../../ui/Title';
+import {useAppDispatch} from "../../../hooks/redux";
+import {changeAnalyzeText} from "../../../store/reducers/timeAnalyzerReducer";
 
 interface IProps {
     actionsText: string
-    setActionsText: Function,
     handleAnalyzeButtonClick: Function,
     error: Error | null,
     isManyDays: boolean,
     setIsManyDays: any
 }
 
-export const EnterActions: React.FC<IProps> = ({setActionsText, actionsText, handleAnalyzeButtonClick, error, isManyDays, setIsManyDays}) => {
+export const EnterActions: React.FC<IProps> = ({actionsText, handleAnalyzeButtonClick, error, isManyDays, setIsManyDays}) => {
+
+    const dispatch = useAppDispatch()
+
     return (
         <Box d={'flex'} flexDirection={'column'} alignItems={'center'}>
             <Title>Enter your actions!</Title>
             <Box mt={4} d={'flex'} justifyContent={'center'} alignSelf={'stretch'}>
-                <NumeratedTextarea textareaValue={actionsText} setTextareaValue={setActionsText}
+                <NumeratedTextarea textareaValue={actionsText} setTextareaValue={(value: string) => dispatch(changeAnalyzeText(value))}
                                    placeholder={'Enter your actions here'}/>
             </Box>
             {error &&

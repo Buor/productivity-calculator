@@ -1,17 +1,19 @@
 import React, {useState} from 'react'
 import {EnterActions} from './EnterActions';
-import {AnalyzeResult} from './AnalyzeResult/AnalyzeResult';
+import {AnalyzeResult} from '../../reusable/AnalyzeResult/AnalyzeResult';
 import {CalendarDal} from "../../../core/dal/calendarDal";
 import {IDateResult} from "../../../../../commonTypes/timeAnalyzerTypes";
 import {restoreActionsDates} from "../../../core/utils/timeUtils";
 import {SuccessAnalysis} from "./SuccessAnalysis";
+import {useAppSelector} from "../../../hooks/redux";
 
 interface IProps {
 
 }
 
 export const TimeAnalyzer: React.FC<IProps> = () => {
-    const [actionsText, setActionsText] = useState(``)
+
+    const {actionsText} = useAppSelector(state => state.timeAnalyzer)
 
     const [analyzeResult, setAnalyzeResult] = useState<IDateResult | null | string>(null)
     // todo delete (mock data for test purposes)
@@ -54,7 +56,6 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
             {
                 analyzeResult === null
                     ? <EnterActions actionsText={actionsText}
-                                    setActionsText={setActionsText}
                                     handleAnalyzeButtonClick={analyze}
                                     error={enterActionsError}
                                     isManyDays={isManyDays}

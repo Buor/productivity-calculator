@@ -7,12 +7,16 @@ import App from './App'
 import {ChakraProvider} from '@chakra-ui/react'
 import {BrowserRouter} from 'react-router-dom'
 import {customTheme} from './theme/theme'
+import {Provider} from "react-redux";
+import {setupStore} from "./store/store";
 
 ReactDOM.render(
-    <BrowserRouter>
-        <ChakraProvider theme={customTheme} resetCSS>
-            <App/>
-        </ChakraProvider>
-    </BrowserRouter>,
+    <Provider store={setupStore()}>
+        <BrowserRouter>
+            <ChakraProvider theme={customTheme} resetCSS>
+                <App/>
+            </ChakraProvider>
+        </BrowserRouter>
+    </Provider>,
     document.getElementById('root')
 )
