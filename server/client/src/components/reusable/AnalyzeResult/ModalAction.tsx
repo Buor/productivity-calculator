@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Box, Td, Tr} from "@chakra-ui/react";
-import {IAction} from "../../../../../../commonTypes/timeAnalyzerTypes";
-import {getActionTimeInterval} from "../../../../core/utils/timeUtils";
+import {IAction} from "../../../../../commonTypes/timeAnalyzerTypes";
+import {getActionTimeInterval} from "../../../core/utils/timeUtils";
 
 interface IProps {
     action: IAction

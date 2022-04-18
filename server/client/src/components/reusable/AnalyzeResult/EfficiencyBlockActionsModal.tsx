@@ -18,9 +18,9 @@ import {
     Thead,
     Tr
 } from '@chakra-ui/react';
-import {convertMs} from '../../../../core/utils/timeUtils';
+import {convertMs} from '../../../core/utils/timeUtils';
 import {ModalAction} from "./ModalAction";
-import {IAction} from "../../../../../../commonTypes/timeAnalyzerTypes";
+import {IAction} from "../../../../../commonTypes/timeAnalyzerTypes";
 
 type TDisplayMode = 'Time sum' | 'All actions'
 type TOrder = 'Descending' | 'Ascending'

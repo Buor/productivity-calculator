@@ -1,10 +1,10 @@
 import React, {useMemo, useState} from 'react'
 import {Box} from '@chakra-ui/react';
-import {Card} from '../../../ui/Card';
+import {Card} from '../../ui/Card';
 import {EfficiencyBlockActionsModal} from './EfficiencyBlockActionsModal';
-import {Title} from '../../../ui/Title';
+import {Title} from '../../ui/Title';
 import {SearchIcon} from "@chakra-ui/icons";
-import {IAction, IActionPercentages} from "../../../../../../commonTypes/timeAnalyzerTypes";
+import {IAction, IActionPercentages} from "../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     actionsPercentages: IActionPercentages,

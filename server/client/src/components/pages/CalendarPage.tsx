@@ -4,12 +4,16 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {YearCalendar} from "../individual/Calendar/YearCalendar";
 import {CalendarDal} from "../../core/dal/calendarDal";
 import {IDateData, IMonthDTO} from "../../../../commonTypes/dtos";
+import {IDateResult} from "../../../../commonTypes/timeAnalyzerTypes";
+import {AnalyzeResult} from "../reusable/AnalyzeResult/AnalyzeResult";
 
 export interface ICalendarContext {
     selectedDate: IDateData | null
     setSelectedDate: Function
     selectedMonth: Date
     setSelectedMonth: Function
+    dateResult: IDateResult | null,
+    setDateResult: Function
 }
 
 export const CalendarContext = createContext<ICalendarContext>({
@@ -19,7 +23,10 @@ export const CalendarContext = createContext<ICalendarContext>({
 
     selectedMonth: new Date(),
     setSelectedMonth: () => {
-    }
+    },
+
+    dateResult: null,
+    setDateResult: () => {}
 })
 
 export const useCalendarContext = () => useContext(CalendarContext)
@@ -28,10 +35,11 @@ export const CalendarPage: React.FC = () => {
 
     const [selectedDate, setSelectedDate] = useState<IDateData | null>(null)
     const [selectedMonth, setSelectedMonth] = useState<Date>(new Date())
+    const [dateResult, setDateResult] = useState<IDateResult | null>(null)
 
     const [calendarType, setCalendarType] = useState<'month' | 'year'>('month')
     const [monthData, setMonthData] = useState<IMonthDTO | null>(null)
-    console.log(selectedDate)
+
     useEffect(() => {
         getDates()
     }, [selectedMonth])
@@ -50,6 +58,9 @@ export const CalendarPage: React.FC = () => {
 
         selectedMonth,
         setSelectedMonth,
+
+        dateResult,
+        setDateResult
     }}>
         <Box>
             <Text fontSize={36} textAlign={'center'} mt={5}>Calendar</Text>
@@ -59,6 +70,9 @@ export const CalendarPage: React.FC = () => {
                         monthData={monthData!}
                     />
                     : <YearCalendar/>
+            }
+            {
+                dateResult ? <AnalyzeResult analyzeResult={dateResult}/> : null
             }
         </Box>
     </CalendarContext.Provider>

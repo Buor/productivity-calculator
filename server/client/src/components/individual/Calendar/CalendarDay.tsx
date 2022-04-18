@@ -8,10 +8,15 @@ interface IProps {
 
 export const CalendarDay: React.FC<IProps> = ({dateData}) => {
 
-    const {selectedDate, setSelectedDate} = useCalendarContext()
+    const {selectedDate, setSelectedDate, setDateResult} = useCalendarContext()
     const dateResult = dateData.dateResult
     const currentDate = new Date(dateData.dateISO)
 
+    const handleClick = () => {
+        setSelectedDate(dateData)
+        setDateResult(dateResult)
+    }
+    
     return <Box
         flex={'1 1 14.28%'}
         cursor={'pointer'}
@@ -23,7 +28,7 @@ export const CalendarDay: React.FC<IProps> = ({dateData}) => {
             backgroundColor: 'custom.medium'
         }}
 
-        onClick={() => setSelectedDate(dateData)}
+        onClick={handleClick}
     >
         {currentDate.getDate()}
     </Box>

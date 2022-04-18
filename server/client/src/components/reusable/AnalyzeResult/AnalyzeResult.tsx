@@ -3,7 +3,7 @@ import {Box} from '@chakra-ui/react';
 import {EfficiencyBlock} from './EfficiencyBlock';
 import {AdvicesBlock} from './AdvicesBlock';
 import {ProductivityBlock} from './ProductivityBlock';
-import {IDateResult} from "../../../../../../commonTypes/timeAnalyzerTypes";
+import {IDateResult} from "../../../../../commonTypes/timeAnalyzerTypes";
 
 interface IProps {
     analyzeResult: IDateResult
