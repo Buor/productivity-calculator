@@ -1,18 +1,19 @@
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {Box, Text} from "@chakra-ui/react";
 import {Calendar} from "../individual/Calendar/Calendar";
-import {createContext, useContext, useEffect, useState} from "react";
 import {YearCalendar} from "../individual/Calendar/YearCalendar";
 import {CalendarDal} from "../../core/dal/calendarDal";
 import {IDateData, IMonthDTO} from "../../../../commonTypes/dtos";
 import {IDateResult} from "../../../../commonTypes/timeAnalyzerTypes";
 import {AnalyzeResult} from "../reusable/AnalyzeResult/AnalyzeResult";
+import {NoData} from "../individual/Calendar/NoData";
 
 export interface ICalendarContext {
     selectedDate: IDateData | null
     setSelectedDate: Function
     selectedMonth: Date
     setSelectedMonth: Function
-    dateResult: IDateResult | null,
+    dateResult: IDateResult | null | 'non selected',
     setDateResult: Function
 }
 
@@ -26,7 +27,8 @@ export const CalendarContext = createContext<ICalendarContext>({
     },
 
     dateResult: null,
-    setDateResult: () => {}
+    setDateResult: () => {
+    }
 })
 
 export const useCalendarContext = () => useContext(CalendarContext)
@@ -35,7 +37,7 @@ export const CalendarPage: React.FC = () => {
 
     const [selectedDate, setSelectedDate] = useState<IDateData | null>(null)
     const [selectedMonth, setSelectedMonth] = useState<Date>(new Date())
-    const [dateResult, setDateResult] = useState<IDateResult | null>(null)
+    const [dateResult, setDateResult] = useState<IDateResult | null | 'non selected'>('non selected')
 
     const [calendarType, setCalendarType] = useState<'month' | 'year'>('month')
     const [monthData, setMonthData] = useState<IMonthDTO | null>(null)
@@ -72,7 +74,11 @@ export const CalendarPage: React.FC = () => {
                     : <YearCalendar/>
             }
             {
-                dateResult ? <AnalyzeResult analyzeResult={dateResult}/> : null
+                dateResult === 'non selected'
+                    ? null
+                    : dateResult === null
+                        ? <NoData dateISO={selectedDate?.dateISO!}/>
+                        : <AnalyzeResult analyzeResult={dateResult}/>
             }
         </Box>
     </CalendarContext.Provider>

@@ -27,6 +27,15 @@ export function restoreActionsDates(actions: IAction[]) {
     }))
 }
 
+const getStrMonth = (date: Date) => ('0' + (date.getMonth() + 1)).slice(-2)
+
+const getStrDate = (date: Date) => ('0' + date.getDate()).slice(-2)
+
+export function formatDate(date: Date, type: 'dot' | 'dash' = 'dot') {
+    if (type === 'dot') return `${getStrDate(date)}.${getStrMonth(date)}.${date.getFullYear()}`
+    return `${date.getFullYear()}-${getStrMonth(date)}-${getStrDate(date)}`
+}
+
 export function getActionTimeInterval(action: IAction) {
     return action.startTime.getHours() + ':' + ('0' + action.startTime.getMinutes()).slice(-2) + '-' + action.endTime.getHours() + ':' + ('0' + action.endTime.getMinutes()).slice(-2)
 }
