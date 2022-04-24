@@ -1,6 +1,7 @@
 import {Body, Controller, Get, Param, Post} from "@nestjs/common";
 import {CalendarService} from "./calendar.service";
 import {IDateResult} from "../../../commonTypes/timeAnalyzerTypes";
+import {IAnalyzeDateDTO} from "../../../commonTypes/dtos";
 
 @Controller('/calendar')
 export class CalendarController {
@@ -24,12 +25,12 @@ export class CalendarController {
     }
 
     @Post('/date')
-    async addDay(@Body() body: {actionsString: string}): Promise<IDateResult> {
-        return await this.calendarService.addDay(body.actionsString)
+    async addDay(@Body() body: IAnalyzeDateDTO): Promise<IDateResult> {
+        return await this.calendarService.addDay(body)
     }
 
     @Post('/dates')
-    async addDays(@Body() body: {actionsString: string}): Promise<boolean> {
-        return await this.calendarService.addDays(body.actionsString)
+    async addDays(@Body() body: IAnalyzeDateDTO): Promise<boolean> {
+        return await this.calendarService.addDays(body)
     }
 }

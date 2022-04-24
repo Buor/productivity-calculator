@@ -28,6 +28,8 @@ export class Action {
     @ManyToOne(() => ActionType, actionType => actionType.actions)
     actionType: ActionType
 
-    @ManyToOne(() => DateE, dateE => dateE.actions)
+    @ManyToOne(() => DateE, dateE => dateE.actions, {
+        onDelete: "CASCADE"
+    })
     date: DateE
 }

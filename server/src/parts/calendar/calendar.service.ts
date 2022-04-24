@@ -18,7 +18,7 @@ import {formatDate, generateDatesForFetch, getDateHM, hmToDate} from "../../util
 import {getProductivity} from "../../core/timeAnalyzer/getProductivity";
 import {Advices} from "../../utils/advices/advices";
 import {analyzeResultToDateResult} from "../../core/timeAnalyzer/timeAnalyzerUtils";
-import {IDateData, IMonthDTO} from "../../../commonTypes/dtos";
+import {IAnalyzeDateDTO, IDateData, IMonthDTO} from "../../../commonTypes/dtos";
 
 @Injectable()
 export class CalendarService {
@@ -29,11 +29,15 @@ export class CalendarService {
     ) {
     }
 
-    async addDay(actionsText: string): Promise<IDateResult | never> {
+    async addDay({actionsText, isReplace}: IAnalyzeDateDTO): Promise<IDateResult | never> {
         try {
-            const dateResult = analyzeTime(actionsText)
-            await this.addDayToDb(dateResult)
-            return analyzeResultToDateResult(dateResult)
+            const analyzeResult = analyzeTime(actionsText)
+            const dateDb = await this.getDateDbFromDb(analyzeResult.date)
+
+            await this.handleReplace(dateDb, isReplace, analyzeResult.date)
+
+            await this.addDayToDb(analyzeResult)
+            return analyzeResultToDateResult(analyzeResult)
         } catch (e) {
             throw new HttpException({
                 message: e.message,
@@ -41,7 +45,7 @@ export class CalendarService {
         }
     }
 
-    async addDays(actionsText: string): Promise<true | never> {
+    async addDays({actionsText, isReplace}: IAnalyzeDateDTO): Promise<true | never> {
         const actionsSplitByDates = actionsText.split(/-{4,}/)
 
         if (actionsSplitByDates.length < 2) throw new HttpException({
@@ -49,9 +53,15 @@ export class CalendarService {
         }, HttpStatus.BAD_REQUEST)
 
         try {
-            const daysActions = actionsSplitByDates.map(dayActions => analyzeTime(dayActions))
-            for (let dayActions of daysActions)
-                await this.addDayToDb(dayActions)
+            const analyzeResults = actionsSplitByDates.map(dayActions => analyzeTime(dayActions))
+
+            for(let analyzeResult of analyzeResults) {
+                const dateDb = await this.getDateDbFromDb(analyzeResult.date)
+                await this.handleReplace(dateDb, isReplace, analyzeResult.date)
+            }
+
+            for (let analyzeResult of analyzeResults)
+                await this.addDayToDb(analyzeResult)
 
             return true
         } catch (e) {
@@ -60,10 +70,6 @@ export class CalendarService {
             }, HttpStatus.BAD_REQUEST)
         }
     }
-
-    // async getMonth() {
-    //
-    // }
 
     async getDate(dateStr: string): Promise<IDateResult> {
         const date = new Date(dateStr)
@@ -88,12 +94,17 @@ export class CalendarService {
         }
     }
 
-    private async getDateResultFromDb(date: Date): Promise<IDateResult | null> {
-        const dateDb = await this.dateRepository.findOne({
-            where: {date: formatDate(date, 'dash')},
-            relations: ['dateResult']
-        })
+    private async handleReplace(dateDb: DateE, isReplace: boolean, date: Date) {
+        if(!isReplace && dateDb) {
+            throw new Error(`Can't add ${formatDate(date)} date, it's data already exists!`)
+        }
+        else if(isReplace && dateDb) {
+            await this.dateRepository.remove(dateDb)
+        }
+    }
 
+    private async getDateResultFromDb(date: Date): Promise<IDateResult | null> {
+        const dateDb = await this.getDateDbFromDb(date)
         if (!dateDb) return null
 
         const dateResultDb = dateDb.dateResult
@@ -146,6 +157,7 @@ export class CalendarService {
     }
 
     private async addDayToDb(dayResult: IAnalyzeResult) {
+
         //Deal with dateResult
         let dateResult = this.dateResultRepository.create()
         dateResult.positiveActionsPercentage = dayResult.actionsPercentages.positive.percentage
@@ -179,5 +191,11 @@ export class CalendarService {
 
             await this.actionRepository.save(dbAction)
         }
+    }
+
+    private async getDateDbFromDb(date: Date) {
+        return this.dateRepository.findOne({
+            where: {date: formatDate(date, 'dash')}
+        })
     }
 }

@@ -11,10 +11,10 @@ export class DateE {
     @Column('date')
     date: Date
 
-    @OneToMany(() => Action, action => action.date)
+    @OneToMany(() => Action, action => action.date, {cascade: ['remove']})
     actions: Action[]
 
-    @OneToOne(() => DateResult, dateResult => dateResult.dateE)
+    @OneToOne(() => DateResult, dateResult => dateResult.dateE, {cascade: ['remove']})
     @JoinColumn()
     dateResult: DateResult
 }
