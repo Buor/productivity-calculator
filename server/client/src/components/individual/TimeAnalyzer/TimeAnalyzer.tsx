@@ -28,6 +28,7 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
     // })
     const [enterActionsError, setEnterActionsError] = useState<Error | null>(null)
     const [isManyDays, setIsManyDays] = useState(false)
+    const [isReplace, setIsReplace] = useState(false)
 
     const reset = () => setAnalyzeResult(null)
 
@@ -35,11 +36,11 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
         let analyzeResult: IDateResult | null | string
         try {
             if (!isManyDays) {
-                const response = await CalendarDal.addDate(actionsText)
+                const response = await CalendarDal.addDate({actionsText, isReplace})
                 analyzeResult = response.data as IDateResult
                 analyzeResult.actions = restoreActionsDates(analyzeResult.actions)
             } else {
-                const response = await CalendarDal.addDates(actionsText)
+                const response = await CalendarDal.addDates({actionsText, isReplace})
                 if (response.data === true)
                     analyzeResult = `Actions has been successfully parsed!`
                 else
@@ -58,8 +59,12 @@ export const TimeAnalyzer: React.FC<IProps> = () => {
                     ? <EnterActions actionsText={actionsText}
                                     handleAnalyzeButtonClick={analyze}
                                     error={enterActionsError}
+
                                     isManyDays={isManyDays}
-                                    setIsManyDays={setIsManyDays}/>
+                                    setIsManyDays={setIsManyDays}
+
+                                    isReplace={isReplace}
+                                    setIsReplace={setIsReplace}/>
                     : typeof (analyzeResult) === 'string'
                         ? <SuccessAnalysis analyzeResult={analyzeResult} reset={reset}/>
                         : <AnalyzeResult analyzeResult={analyzeResult}/>

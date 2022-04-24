@@ -1,12 +1,13 @@
 import {axiosInstance} from "./axiosInstance";
+import {IAnalyzeDateDTO} from "../../../../commonTypes/dtos";
 
 export class CalendarDal {
-    static async addDate(actionsString: string) {
-        return axiosInstance.post('/calendar/date', {actionsString})
+    static async addDate(analyzeDateDTO: IAnalyzeDateDTO) {
+        return axiosInstance.post('/calendar/date', analyzeDateDTO)
     }
 
-    static async addDates(actionsString: string) {
-        return axiosInstance.post('/calendar/dates', {actionsString})
+    static async addDates(analyzeDateDTO: IAnalyzeDateDTO) {
+        return axiosInstance.post('/calendar/dates', analyzeDateDTO)
     }
 
     static async getMonth(month: Date) {
