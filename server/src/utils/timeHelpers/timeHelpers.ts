@@ -25,7 +25,7 @@ export function generateDatesForFetch(month: Date) {
     dateToIter.setDate(dateToIter.getDate() - decr)
 
     //Fill with month dates
-    for (; !(dateToIter.getMonth() === monthNumber + 1 && dateToIter.getDay() === 1); dateToIter.setDate(dateToIter.getDate() + 1)) {
+    for (; !(dateToIter.getMonth() === (monthNumber + 1) % 12 && dateToIter.getDay() === 1); dateToIter.setDate(dateToIter.getDate() + 1)) {
         dates.push(new Date(+dateToIter))
     }
 
