@@ -8,7 +8,7 @@ interface IProps {
 
 export const CalendarDay: React.FC<IProps> = ({dateData}) => {
 
-    const {selectedDate, setSelectedDate, setDateResult} = useCalendarContext()
+    const {selectedDate, setSelectedDate, setDateResult, selectedMonth} = useCalendarContext()
     const dateResult = dateData.dateResult
     const currentDate = new Date(dateData.dateISO)
 
@@ -18,12 +18,13 @@ export const CalendarDay: React.FC<IProps> = ({dateData}) => {
     }
     
     return <Box
-        flex={'1 1 14.28%'}
+        flex={'0 1 14.28%'}
         cursor={'pointer'}
         textAlign={'center'}
         fontSize={16}
         py={4}
         backgroundColor={selectedDate === dateData ? 'custom.medium' : 'transparent'}
+        color={(new Date(dateData.dateISO)).getMonth() === selectedMonth.getMonth() ? 'white' : 'gray'}
         _hover={{
             backgroundColor: 'custom.medium'
         }}
