@@ -195,7 +195,8 @@ export class CalendarService {
 
     private async getDateDbFromDb(date: Date) {
         return this.dateRepository.findOne({
-            where: {date: formatDate(date, 'dash')}
+            where: {date: formatDate(date, 'dash')},
+            relations: ['dateResult']
         })
     }
 }
