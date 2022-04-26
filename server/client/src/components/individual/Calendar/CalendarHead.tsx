@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export const CalendarHead: React.FC<IProps> = ({month, year, leftButtonHandler, rightButtonHandler}) => {
-    return <Box d={'flex'}>
+    return <Box d={'flex'} w={'100%'} justifyContent={'center'}>
         <Button flex={'0 1 48px'}
                 borderRadius={0} p={0}
                 backgroundColor={'transparent'}

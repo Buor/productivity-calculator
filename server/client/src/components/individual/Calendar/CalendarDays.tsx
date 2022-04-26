@@ -9,7 +9,7 @@ interface IProps {
 
 export const CalendarDays: React.FC<IProps> = ({datesData}) => {
 
-    return <Box d={'flex'} flexWrap={'wrap'} maxW={'60%'}>
+    return <Box d={'flex'} flexWrap={'wrap'} maxW={'500px'}>
         {datesData.map(dateData =>
             <CalendarDay
                 key={dateData.dateISO}
