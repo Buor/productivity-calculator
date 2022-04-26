@@ -26,6 +26,8 @@ export class DateResult {
     @Column()
     advicesLinks: string
 
-    @OneToOne(() => DateE, dateE => dateE.dateResult)
+    @OneToOne(() => DateE, dateE => dateE.dateResult, {
+        onDelete: 'CASCADE'
+    })
     dateE: DateE
 }
